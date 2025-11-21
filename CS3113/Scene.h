@@ -1,0 +1,78 @@
+#include "Entity.h"
+
+#ifndef SCENE_H
+#define SCENE_H
+
+struct GameState
+{
+    Entity *player;
+    Entity *bg; // needs unique collider offsets to the size of the walkable area (also used for title)
+    
+    Entity *dialoguebox;
+    bool dialogueActive = false;
+    std::string dialogueText;
+    int dialogueStep = 0; // for when there's multiple things of dialogue
+
+    // for attic
+    Entity *atticdoor; // leads to the hallway
+    Entity *chest; // puzzle 1 interactable
+    Entity *wardrobe; // puzzle 2 interactable
+    Entity *album; // puzzle 3 interactable
+
+    // for hallway
+    Entity *stairs; // leads back to attic
+    Entity *herdoor; // leads to herroom (puzzle 1)
+    Entity *bedroomdoor; // leads to bedroom (puzzle 3)
+    Entity *livingroomdoor;
+
+    // for her room
+    Entity *herbed;
+    Entity *herhallwaydoor;
+    Entity *beanbag;
+    Entity *herdesk;
+    Entity *herchair;
+    Entity *hershelf;
+    Entity *hertable;
+
+    Music bgm;
+    Sound stairsSound;
+    Sound doorSound;
+
+    Camera2D camera;
+
+    int nextSceneID;
+};
+
+class Scene 
+{
+protected: // similar to private but children and friend classes can use them
+    GameState mGameState;
+    Vector2 mOrigin;
+    const char *mBGColourHexCode = "#2D2A2A";
+    static bool completedpuz1;
+    static bool completedpuz2;
+    static bool completedpuz3;
+    
+public:
+    Scene();
+    Scene(Vector2 origin, const char *bgHexCode);
+
+    virtual void initialise() = 0;
+    virtual void update(float deltaTime) = 0;
+    virtual void render() = 0;
+    virtual void shutdown() = 0;
+
+    static bool getPuz1Status()                  { return completedpuz1; }
+    static void setPuz1Status(bool status)      { completedpuz1 = status; }
+    static bool getPuz2Status()                  { return completedpuz2; }
+    static void setPuz2Status(bool status)      { completedpuz2 = status; }
+    static bool getPuz3Status()                  { return completedpuz3; }
+    static void setPuz3Status(bool status)      { completedpuz3 = status; }
+    
+    GameState   getState()           const { return mGameState; }
+    Vector2     getOrigin()          const { return mOrigin;    }
+    const char* getBGColourHexCode() const { return mBGColourHexCode; }
+
+};
+
+#endif
