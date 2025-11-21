@@ -131,38 +131,45 @@ void Attic::update(float deltaTime)
     bool nearChest = mGameState.player->isColliding(mGameState.chest);
     bool nearWardrobe = mGameState.player->isColliding(mGameState.wardrobe);
     bool nearAlbum = mGameState.player->isColliding(mGameState.album);
+    bool nearAtticDoor = mGameState.player->isColliding(mGameState.atticdoor);
 
     if (IsKeyPressed(KEY_E)){
-    if (mGameState.dialogueActive){
-        // multiple dialogue things
-        mGameState.dialogueStep++;
-        if (mGameState.dialogueStep > 1){
-            mGameState.dialogueActive = false;
-            mGameState.dialogueStep = 0;
-        }
-    } 
-    else{
-        if (nearChest && !completedPuz1){ // puz1 interaction
-            mGameState.dialogueActive = true;
-            mGameState.dialogueStep = 0;
-            mGameState.dialogueText = "It's locked";
+        if (mGameState.dialogueActive){
+            // multiple dialogue things
+            mGameState.dialogueStep++;
+            if (mGameState.dialogueStep > 1){
+                mGameState.dialogueActive = false;
+                mGameState.dialogueStep = 0;
+            }
         } 
-        else if ((nearWardrobe && !completedPuz2) || (nearAlbum && !completedPuz3)){ // no puz2 or 3 until 1 done
-            mGameState.dialogueActive = true;
-            mGameState.dialogueStep = 0;
-            mGameState.dialogueText = "No.. not yet";
+        else{
+            if (nearAtticDoor){ // leave to hallways
+                mGameState.nextSceneID = 0; // TODO: CHANGE TO HALLWAY SCENE
+                return;
+            }
+            if (nearChest && !completedPuz1){ // puz1 interaction
+                mGameState.dialogueActive = true;
+                mGameState.dialogueStep = 0;
+                mGameState.dialogueText = "It's locked";
+            } 
+            else if ((nearWardrobe && !completedPuz2) || (nearAlbum && !completedPuz3)){ // no puz2 or 3 until 1 done
+                mGameState.dialogueActive = true;
+                mGameState.dialogueStep = 0;
+                mGameState.dialogueText = "No.. not yet";
+            }
         }
-    }
-    if (mGameState.dialogueActive){
-        if (nearChest && !completedPuz1){
-            if (mGameState.dialogueStep == 1){
-                mGameState.dialogueText = "I need to remember the combination";
+        if (mGameState.dialogueActive){
+            if (nearChest && !completedPuz1){
+                if (mGameState.dialogueStep == 1){
+                    mGameState.dialogueText = "I need to remember the combination";
+                }
             }
         }
     }
-}
 
     // TODO: Add interaction stuff with atticdoor, chest, wardrobe, and album
+    // TODO: Fix dialogue system
+
     if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 0; } // go to lvl 1
 }
 
