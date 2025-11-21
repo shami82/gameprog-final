@@ -20,10 +20,10 @@ struct GameState
     Entity *album; // puzzle 3 interactable
 
     // for hallway
-    Entity *stairs; // leads back to attic
+    Entity *atticstairs; // leads back to attic
     Entity *herdoor; // leads to herroom (puzzle 1)
     Entity *bedroomdoor; // leads to bedroom (puzzle 3)
-    Entity *livingroomdoor;
+    Entity *livingroomdoor; // leads to livingroom (puzzle 2)
 
     // for her room
     Entity *herbed;

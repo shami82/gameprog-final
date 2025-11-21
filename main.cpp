@@ -1,10 +1,10 @@
-#include "CS3113/Attic.h"
+#include "CS3113/Hallway.h"
 
 // Global Constants
 constexpr int SCREEN_WIDTH     = 990,
               SCREEN_HEIGHT    = 720,
               FPS              = 120,
-              NUMBER_OF_LEVELS = 3; // 5 room, 1 start, 1 instr, 2 end, 3 memories
+              NUMBER_OF_LEVELS = 4; // 5 rooms, 1 start, 1 instr, 2 end, 3 memories
 
 constexpr Vector2 ORIGIN       = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
@@ -21,7 +21,7 @@ std::vector<Scene*> gLevels = {};
 Start *gStart   = nullptr;
 Instruction *gInstruction = nullptr;
 Attic *gAttic = nullptr;
-// Hallway *gHallway = nullptr;
+Hallway *gHallway = nullptr;
 // HerRoom *gHerRoom = nullptr;
 // LivingRoom *gLivingRoom = nullptr;
 // BedRoom *gBedRoom = nullptr;
@@ -49,7 +49,7 @@ void initialise()
     gStart = new Start(ORIGIN, "#2D2A2A");
     gInstruction = new Instruction(ORIGIN, "#2D2A2A");
     gAttic = new Attic(ORIGIN, "#2D2A2A");
-    // gHallway = new Hallway(ORIGIN, "#2D2A2A");
+    gHallway = new Hallway(ORIGIN, "#2D2A2A");
     // gHerRoom = new HerRoom(ORIGIN, "#2D2A2A");
     // gLivingRoom = new LivingRoom(ORIGIN, "#2D2A2A");
     // gBedRoom = new BedRoom(ORIGIN, "#2D2A2A");
@@ -57,7 +57,7 @@ void initialise()
     gLevels.push_back(gStart);
     gLevels.push_back(gInstruction);
     gLevels.push_back(gAttic);
-    // gLevels.push_back(gHallway);
+    gLevels.push_back(gHallway);
     // gLevels.push_back(gHerRoom);
     // gLevels.push_back(gLivingRoom);
     // gLevels.push_back(gBedRoom);
@@ -71,7 +71,7 @@ void processInput()
 {
     if(gCurrentScene != gLevels[0] && gCurrentScene != gLevels[1]){
         gCurrentScene->getState().player->resetMovement();
-        
+
         Vector2 movement = gCurrentScene->getState().player->getMovement();
         if (movement.x > 0) gCurrentScene->getState().player->setDirection(RIGHT);
         else if (movement.x < 0) gCurrentScene->getState().player->setDirection(LEFT);
@@ -136,7 +136,7 @@ void shutdown()
     delete gStart;
     delete gInstruction;
     delete gAttic;
-    // delete gHallway;
+    delete gHallway;
     // delete gHerRoom;
     // delete gLivingRoom;
     // delete gBedRoom;

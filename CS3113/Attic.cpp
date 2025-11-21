@@ -45,8 +45,8 @@ void Attic::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x, // little smaller?
-        mGameState.player->getScale().y
+        mGameState.player->getScale().x, // TODO: make little smaller?
+        mGameState.player->getScale().y  // TODO: make little smaller?
     });
     mGameState.player->setSpeed(150);
     mGameState.player->setDirection(UP); // facing the things in the room
@@ -144,7 +144,7 @@ void Attic::update(float deltaTime)
         } 
         else{
             if (nearAtticDoor){ // leave to hallways
-                mGameState.nextSceneID = 0; // TODO: CHANGE TO HALLWAY SCENE
+                mGameState.nextSceneID = 3; // TODO: CHANGE TO HALLWAY SCENE
                 return;
             }
             if (nearChest && !completedPuz1){ // puz1 interaction
@@ -168,7 +168,7 @@ void Attic::update(float deltaTime)
     }
 
     // TODO: Add interaction stuff with atticdoor, chest, wardrobe, and album
-    // TODO: Fix dialogue system
+    // TODO: Fix dialogue system so no double clicks
 
     if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 0; } // go to lvl 1
 }
