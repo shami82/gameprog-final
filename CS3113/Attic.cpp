@@ -144,7 +144,7 @@ void Attic::update(float deltaTime)
         } 
         else{
             if (nearAtticDoor){ // leave to hallways
-                mGameState.nextSceneID = 3; // TODO: CHANGE TO HALLWAY SCENE
+                mGameState.nextSceneID = 4; // TODO: CHANGE TO HALLWAY SCENE
                 return;
             }
             if (nearChest && !completedPuz1){ // puz1 interaction

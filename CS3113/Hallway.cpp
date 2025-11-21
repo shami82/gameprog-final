@@ -141,7 +141,7 @@ void Hallway::update(float deltaTime)
             return;
         }
         if (nearHerDoor){
-            mGameState.nextSceneID = 1; // go to her room
+            mGameState.nextSceneID = 4; // go to her room
             return;
         }
         // below is what will happen after setting the other rooms
@@ -159,7 +159,7 @@ void Hallway::update(float deltaTime)
                 mGameState.dialogueText = "Wait, no, this isn't the place";
                 return;
             }
-            mGameState.nextSceneID = 2; // TODO: CHANGE TO BEDROOM
+            mGameState.nextSceneID = 4; // TODO: CHANGE TO BEDROOM
             return;
         }
         if (nearLivingroomDoor){
@@ -168,7 +168,7 @@ void Hallway::update(float deltaTime)
                 mGameState.dialogueText = "Wait, no, this isn't the place";
                 return;
             }
-            mGameState.nextSceneID = 2; // TODO: CHANGE TO LIVINGROOM
+            mGameState.nextSceneID = 4; // TODO: CHANGE TO LIVINGROOM
             return;
         }
     }
