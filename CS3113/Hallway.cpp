@@ -175,8 +175,6 @@ void Hallway::update(float deltaTime)
 
     // TODO: Decide if interaction will stay guided or not
     // TODO: Fix dialogue system so no double clicks
-
-    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 0; } // go to lvl 1
 }
 
 void Hallway::render()
@@ -185,18 +183,18 @@ void Hallway::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    mGameState.bg->displayCollider();
+    // mGameState.bg->displayCollider();
     mGameState.atticstairs->render();
-    mGameState.atticstairs->displayCollider();
+    // mGameState.atticstairs->displayCollider();
     mGameState.herdoor->render();
-    mGameState.herdoor->displayCollider();
+    // mGameState.herdoor->displayCollider();
     mGameState.bedroomdoor->render();
-    mGameState.bedroomdoor->displayCollider();
+    // mGameState.bedroomdoor->displayCollider();
     mGameState.livingroomdoor->render();
-    mGameState.livingroomdoor->displayCollider();
+    // mGameState.livingroomdoor->displayCollider();
 
     mGameState.player->render();
-    mGameState.player->displayCollider();
+    // mGameState.player->displayCollider();
 
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();

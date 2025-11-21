@@ -169,8 +169,6 @@ void Attic::update(float deltaTime)
 
     // TODO: Add interaction stuff with atticdoor, chest, wardrobe, and album
     // TODO: Fix dialogue system so no double clicks
-
-    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 0; } // go to lvl 1
 }
 
 void Attic::render()
@@ -179,18 +177,18 @@ void Attic::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    mGameState.bg->displayCollider();
+    // mGameState.bg->displayCollider();
     mGameState.wardrobe->render();
-    mGameState.wardrobe->displayCollider();
+    // mGameState.wardrobe->displayCollider();
     mGameState.chest->render();
-    mGameState.chest->displayCollider();
+    // mGameState.chest->displayCollider();
     mGameState.album->render();
-    mGameState.album->displayCollider();
+    // mGameState.album->displayCollider();
     mGameState.atticdoor->render();
-    mGameState.atticdoor->displayCollider();
+    // mGameState.atticdoor->displayCollider();
 
     mGameState.player->render();
-    mGameState.player->displayCollider();
+    // mGameState.player->displayCollider();
 
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();
