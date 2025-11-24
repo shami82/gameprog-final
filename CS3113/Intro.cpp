@@ -58,6 +58,19 @@ void Intro::render()
         24,
         WHITE
     );
+
+    if (mGameState.dialogueActive){ // show the text that you can interact
+        const char* hint = "[E] to Interact";
+        int fontSize = 20;
+
+        int padding = 20;
+        int textWidth = MeasureText(hint, fontSize);
+
+        int drawX = GetScreenWidth() - textWidth - padding;
+        int drawY = GetScreenHeight() - fontSize - padding;
+
+        DrawText(hint, drawX, drawY, fontSize, WHITE);
+    }
 }
 
 void Intro::shutdown()

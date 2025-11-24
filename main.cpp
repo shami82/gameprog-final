@@ -1,10 +1,10 @@
-#include "CS3113/Hallway.h"
+#include "CS3113/HerRoom.h"
 
 // Global Constants
 constexpr int SCREEN_WIDTH     = 990,
               SCREEN_HEIGHT    = 720,
               FPS              = 120,
-              NUMBER_OF_LEVELS = 5; // 5 rooms, 1 start, 1 instr,1 intro, 2 end, 3 memories
+              NUMBER_OF_LEVELS = 6; // 5 rooms, 1 start, 1 instr,1 intro, 2 end, 3 memories
 
 constexpr Vector2 ORIGIN       = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
@@ -23,7 +23,7 @@ Instruction *gInstruction = nullptr;
 Intro *gIntro = nullptr;
 Attic *gAttic = nullptr;
 Hallway *gHallway = nullptr;
-// HerRoom *gHerRoom = nullptr;
+HerRoom *gHerRoom = nullptr;
 // LivingRoom *gLivingRoom = nullptr;
 // BedRoom *gBedRoom = nullptr;
 
@@ -52,7 +52,7 @@ void initialise()
     gIntro = new Intro(ORIGIN, "#2D2A2A");
     gAttic = new Attic(ORIGIN, "#2D2A2A");
     gHallway = new Hallway(ORIGIN, "#2D2A2A");
-    // gHerRoom = new HerRoom(ORIGIN, "#2D2A2A");
+    gHerRoom = new HerRoom(ORIGIN, "#2D2A2A");
     // gLivingRoom = new LivingRoom(ORIGIN, "#2D2A2A");
     // gBedRoom = new BedRoom(ORIGIN, "#2D2A2A");
 
@@ -61,7 +61,7 @@ void initialise()
     gLevels.push_back(gIntro);
     gLevels.push_back(gAttic);
     gLevels.push_back(gHallway);
-    // gLevels.push_back(gHerRoom);
+    gLevels.push_back(gHerRoom);
     // gLevels.push_back(gLivingRoom);
     // gLevels.push_back(gBedRoom);
 
@@ -142,7 +142,7 @@ void shutdown()
     delete gIntro;
     delete gAttic;
     delete gHallway;
-    // delete gHerRoom;
+    delete gHerRoom;
     // delete gLivingRoom;
     // delete gBedRoom;
 

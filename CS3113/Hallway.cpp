@@ -35,7 +35,7 @@ void Hallway::initialise()
     };
 
     mGameState.player = new Entity(
-        {75.0f, mOrigin.y + 50.0f},            // starting position
+        {mOrigin.x, mOrigin.y + 50.0f},            // starting position
         {100.0f, 155.0f},        // player scale
         texturePlayer,
         ATLAS,
@@ -45,8 +45,8 @@ void Hallway::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x, // TODO: make little smaller?
-        mGameState.player->getScale().y  // TODO: make little smaller?
+        mGameState.player->getScale().x - 20.0f , // TODO: make little smaller?
+        mGameState.player->getScale().y - 60.0f  // TODO: make little smaller?
     });
     mGameState.player->setSpeed(150);
     mGameState.player->setDirection(RIGHT); // facing the things in the room
@@ -79,7 +79,7 @@ void Hallway::initialise()
     
     // ------------ BEDROOM DOOR -------------
     mGameState.bedroomdoor = new Entity(
-        {625.0f, 247.5f},
+        {627.5f, 247.5f},
         {static_cast<float>(textureBedroomDoor.width),
          static_cast<float>(textureBedroomDoor.height)},
         textureBedroomDoor,
@@ -137,11 +137,11 @@ void Hallway::update(float deltaTime)
 
     if (IsKeyPressed(KEY_E)){
         if (nearAtticStairs){
-            mGameState.nextSceneID = 2; // go to attic
+            mGameState.nextSceneID = 3; // go to attic
             return;
         }
         if (nearHerDoor){
-            mGameState.nextSceneID = 4; // go to her room
+            mGameState.nextSceneID = 5; // TODO: CHANGE TO HER ROOM
             return;
         }
         // below is what will happen after setting the other rooms
@@ -183,18 +183,18 @@ void Hallway::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    // mGameState.bg->displayCollider();
+    mGameState.bg->displayCollider();
     mGameState.atticstairs->render();
-    // mGameState.atticstairs->displayCollider();
+    mGameState.atticstairs->displayCollider();
     mGameState.herdoor->render();
-    // mGameState.herdoor->displayCollider();
+    mGameState.herdoor->displayCollider();
     mGameState.bedroomdoor->render();
-    // mGameState.bedroomdoor->displayCollider();
+    mGameState.bedroomdoor->displayCollider();
     mGameState.livingroomdoor->render();
-    // mGameState.livingroomdoor->displayCollider();
+    mGameState.livingroomdoor->displayCollider();
 
     mGameState.player->render();
-    // mGameState.player->displayCollider();
+    mGameState.player->displayCollider();
 
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();
@@ -208,6 +208,29 @@ void Hallway::render()
             24, 
             WHITE
         );
+    }
+
+    bool nearAtticStairs = mGameState.player->isColliding(mGameState.atticstairs);
+    bool nearHerDoor = mGameState.player->isColliding(mGameState.herdoor);
+    bool nearBedroomDoor = mGameState.player->isColliding(mGameState.bedroomdoor);
+    bool nearLivingroomDoor = mGameState.player->isColliding(mGameState.livingroomdoor);
+
+    bool canInteract =
+        nearAtticStairs || nearHerDoor || nearBedroomDoor || nearLivingroomDoor ||
+        mGameState.dialogueActive;
+
+    if (canInteract)
+    {
+        const char* hint = "[E] to Interact";
+        int fontSize = 20;
+
+        int padding = 20;
+        int textWidth = MeasureText(hint, fontSize);
+
+        int drawX = GetScreenWidth() - textWidth - padding;
+        int drawY = GetScreenHeight() - fontSize - padding;
+
+        DrawText(hint, drawX, drawY, fontSize, WHITE);
     }
     
 }

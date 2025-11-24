@@ -45,8 +45,8 @@ void Attic::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x, // TODO: make little smaller?
-        mGameState.player->getScale().y  // TODO: make little smaller?
+        mGameState.player->getScale().x - 20.0f , // TODO: make little smaller?
+        mGameState.player->getScale().y - 60.0f  // TODO: make little smaller?
     });
     mGameState.player->setSpeed(150);
     mGameState.player->setDirection(UP); // facing the things in the room
@@ -133,37 +133,37 @@ void Attic::update(float deltaTime)
     bool nearAlbum = mGameState.player->isColliding(mGameState.album);
     bool nearAtticDoor = mGameState.player->isColliding(mGameState.atticdoor);
 
-    if (IsKeyPressed(KEY_E)){
-        if (mGameState.dialogueActive){
-            // multiple dialogue things
-            mGameState.dialogueStep++;
-            if (mGameState.dialogueStep > 1){
-                mGameState.dialogueActive = false;
-                mGameState.dialogueStep = 0;
-            }
-        } 
-        else{
-            if (nearAtticDoor){ // leave to hallways
-                mGameState.nextSceneID = 4; // TODO: CHANGE TO HALLWAY SCENE
-                return;
-            }
-            if (nearChest && !completedPuz1){ // puz1 interaction
-                mGameState.dialogueActive = true;
-                mGameState.dialogueStep = 0;
-                mGameState.dialogueText = "It's locked";
-            } 
-            else if ((nearWardrobe && !completedPuz2) || (nearAlbum && !completedPuz3)){ // no puz2 or 3 until 1 done
-                mGameState.dialogueActive = true;
-                mGameState.dialogueStep = 0;
-                mGameState.dialogueText = "No.. not yet";
-            }
+    if (mGameState.dialogueActive && IsKeyPressed(KEY_E)){ // multiple dialogue things
+        if (nearChest && !completedPuz1 && mGameState.dialogueStep == 0){
+            mGameState.dialogueStep = 1;
+            mGameState.dialogueText = "I need to remember the combination";
+            return;
         }
-        if (mGameState.dialogueActive){
-            if (nearChest && !completedPuz1){
-                if (mGameState.dialogueStep == 1){
-                    mGameState.dialogueText = "I need to remember the combination";
-                }
-            }
+
+        mGameState.dialogueActive = false;
+        mGameState.dialogueStep = 0;
+        return;
+    }
+
+    if (IsKeyPressed(KEY_E) && !mGameState.dialogueActive){
+        if (nearAtticDoor){
+            mGameState.nextSceneID = 4; // go to hallway
+            return;
+        }
+        if (nearChest && !completedPuz1){ // puz1 interaction
+            mGameState.dialogueActive = true;
+            mGameState.dialogueStep = 0;
+            mGameState.dialogueText = "It's locked";
+        } 
+        if (nearWardrobe && !completedPuz2){
+            mGameState.dialogueActive = true;
+            mGameState.dialogueText = "No... not yet";
+            return;
+        }
+        if (nearAlbum && !completedPuz3){
+            mGameState.dialogueActive = true;
+            mGameState.dialogueText = "No... not yet";
+            return;
         }
     }
 
@@ -177,18 +177,18 @@ void Attic::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    // mGameState.bg->displayCollider();
+    mGameState.bg->displayCollider();
     mGameState.wardrobe->render();
-    // mGameState.wardrobe->displayCollider();
+    mGameState.wardrobe->displayCollider();
     mGameState.chest->render();
-    // mGameState.chest->displayCollider();
+    mGameState.chest->displayCollider();
     mGameState.album->render();
-    // mGameState.album->displayCollider();
+    mGameState.album->displayCollider();
     mGameState.atticdoor->render();
-    // mGameState.atticdoor->displayCollider();
+    mGameState.atticdoor->displayCollider();
 
     mGameState.player->render();
-    // mGameState.player->displayCollider();
+    mGameState.player->displayCollider();
 
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();
@@ -202,6 +202,30 @@ void Attic::render()
             24, 
             WHITE
         );
+    }
+
+    bool nearChest = mGameState.player->isColliding(mGameState.chest);
+    bool nearWardrobe = mGameState.player->isColliding(mGameState.wardrobe);
+    bool nearAlbum = mGameState.player->isColliding(mGameState.album);
+    bool nearAtticDoor = mGameState.player->isColliding(mGameState.atticdoor);
+
+    // showing that you can interact with the corner text
+    bool canInteract = (
+        nearChest || nearWardrobe || nearAlbum || nearAtticDoor || 
+        mGameState.dialogueActive
+    );
+
+    if (canInteract){
+        const char* hint = "[E] to Interact";
+        int fontSize = 20;
+
+        int padding = 20;
+        int textWidth = MeasureText(hint, fontSize);
+
+        int drawX = GetScreenWidth() - textWidth - padding;
+        int drawY = GetScreenHeight() - fontSize - padding;
+
+        DrawText(hint, drawX, drawY, fontSize, WHITE);
     }
     
 }

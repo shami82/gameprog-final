@@ -32,6 +32,7 @@ struct GameState
     Entity *herdesk;
     Entity *herchair;
     Entity *hershelf;
+    Entity *bookshelf;
     Entity *hertable;
 
     Music bgm;
@@ -52,6 +53,11 @@ protected: // similar to private but children and friend classes can use them
     static bool completedpuz1;
     static bool completedpuz2;
     static bool completedpuz3;
+    // for the first puzzle
+    static bool polaroid1Found;
+    static bool polaroid2Found;
+    static bool polaroid3Found;
+    static bool polaroid4Found;
     
 public:
     Scene();
@@ -62,12 +68,22 @@ public:
     virtual void render() = 0;
     virtual void shutdown() = 0;
 
-    static bool getPuz1Status()                  { return completedpuz1; }
+    static bool getPuz1Status()                 { return completedpuz1; }
     static void setPuz1Status(bool status)      { completedpuz1 = status; }
-    static bool getPuz2Status()                  { return completedpuz2; }
+    static bool getPuz2Status()                 { return completedpuz2; }
     static void setPuz2Status(bool status)      { completedpuz2 = status; }
-    static bool getPuz3Status()                  { return completedpuz3; }
+    static bool getPuz3Status()                 { return completedpuz3; }
     static void setPuz3Status(bool status)      { completedpuz3 = status; }
+
+    // for puzzle 1
+    static bool getPol1Status()                 { return polaroid1Found; }
+    static void setPol1Status(bool status)      { polaroid1Found = status; }
+    static bool getPol2Status()                 { return polaroid2Found; }
+    static void setPol2Status(bool status)      { polaroid2Found = status; }
+    static bool getPol3Status()                 { return polaroid3Found; }
+    static void setPol3Status(bool status)      { polaroid3Found = status; }
+    static bool getPol4Status()                 { return polaroid4Found; }
+    static void setPol4Status(bool status)      { polaroid4Found = status; }
     
     GameState   getState()           const { return mGameState; }
     Vector2     getOrigin()          const { return mOrigin;    }
