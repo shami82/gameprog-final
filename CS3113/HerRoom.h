@@ -16,6 +16,10 @@ private:
     Texture2D textureHallwayDoor;
     Texture2D textureBeanbag;
 
+    bool firstTimeDialoguePlayed = false;
+    float dialogueDelayTimer = 0.0f;
+    bool waitingForIntroDialogue = false;
+
 public:
 
     HerRoom();

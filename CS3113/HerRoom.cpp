@@ -155,11 +155,37 @@ void HerRoom::initialise()
         NONE
     );
 
+    if (!Scene::getPuz1Status()){
+        if (!firstTimeDialoguePlayed){ // entering room for first time
+            waitingForIntroDialogue = true;
+            dialogueDelayTimer = 0.0f;
+            firstTimeDialoguePlayed = true;
+        }
+    }
+
 }
 
 void HerRoom::update(float deltaTime)
 {
     // UpdateMusicStream(mGameState.bgm);
+
+    // TODO: add the E key interact thing for the dialogue
+    if (waitingForIntroDialogue){ // timer before intro dialogue
+        dialogueDelayTimer += deltaTime;
+
+        if (dialogueDelayTimer >= 0.2f){
+            waitingForIntroDialogue = false;
+            int screenW = GetScreenWidth();
+            int screenH = GetScreenHeight();
+            mGameState.dialogueActive = true;
+            mGameState.dialogueStep = 0;
+            mGameState.dialogueText =
+                "I haven't been here in a while...";
+            
+            return;
+        }
+    }
+
     mGameState.player->update(deltaTime, nullptr, nullptr, 0);
     if (IsKeyDown(KEY_A)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_D)) mGameState.player->animate(deltaTime);
