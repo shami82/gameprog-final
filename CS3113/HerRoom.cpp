@@ -134,7 +134,7 @@ void HerRoom::initialise()
     
     // ------------ HALLWAY DOOR -------------
     mGameState.herhallwaydoor = new Entity(
-        {670.0f, 625.0f},
+        {670.0f, 620.0f},
         {static_cast<float>(textureHallwayDoor.width),
          static_cast<float>(textureHallwayDoor.height)},
         textureHallwayDoor,
