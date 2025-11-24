@@ -44,7 +44,7 @@ void switchToScene(Scene *scene)
 
 void initialise()
 {
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Meet Me There");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Still Here");
     InitAudioDevice();
 
     gStart = new Start(ORIGIN, "#2D2A2A");
