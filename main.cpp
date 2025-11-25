@@ -1,10 +1,10 @@
-#include "CS3113/HerRoom.h"
+#include "CS3113/Clue1.h"
 
 // Global Constants
 constexpr int SCREEN_WIDTH     = 990,
               SCREEN_HEIGHT    = 720,
               FPS              = 120,
-              NUMBER_OF_LEVELS = 6; // 5 rooms, 1 start, 1 instr,1 intro, 2 end, 3 memories
+              NUMBER_OF_LEVELS = 7; // 5 rooms,1 start,1 instr,1 intro,2 end,3 memories,3 clues
 
 constexpr Vector2 ORIGIN       = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
@@ -24,6 +24,7 @@ Intro *gIntro = nullptr;
 Attic *gAttic = nullptr;
 Hallway *gHallway = nullptr;
 HerRoom *gHerRoom = nullptr;
+Clue1 *gClue1 = nullptr;
 // LivingRoom *gLivingRoom = nullptr;
 // BedRoom *gBedRoom = nullptr;
 
@@ -53,6 +54,7 @@ void initialise()
     gAttic = new Attic(ORIGIN, "#2D2A2A");
     gHallway = new Hallway(ORIGIN, "#2D2A2A");
     gHerRoom = new HerRoom(ORIGIN, "#2D2A2A");
+    gClue1 = new Clue1(ORIGIN, "#2D2A2A");
     // gLivingRoom = new LivingRoom(ORIGIN, "#2D2A2A");
     // gBedRoom = new BedRoom(ORIGIN, "#2D2A2A");
 
@@ -62,6 +64,7 @@ void initialise()
     gLevels.push_back(gAttic);
     gLevels.push_back(gHallway);
     gLevels.push_back(gHerRoom);
+    gLevels.push_back(gClue1);
     // gLevels.push_back(gLivingRoom);
     // gLevels.push_back(gBedRoom);
 
@@ -73,7 +76,7 @@ void initialise()
 void processInput() 
 {
     if(gCurrentScene != gLevels[0] && gCurrentScene != gLevels[1]
-       && gCurrentScene != gLevels[2]){
+       && gCurrentScene != gLevels[2] && gCurrentScene != gLevels[6]){
         gCurrentScene->getState().player->resetMovement();
 
         Vector2 movement = gCurrentScene->getState().player->getMovement();
@@ -143,6 +146,7 @@ void shutdown()
     delete gAttic;
     delete gHallway;
     delete gHerRoom;
+    delete gClue1;
     // delete gLivingRoom;
     // delete gBedRoom;
 

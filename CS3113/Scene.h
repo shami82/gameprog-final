@@ -34,6 +34,28 @@ struct GameState
     Entity *hershelf;
     Entity *bookshelf;
     Entity *hertable;
+    Entity *polaroids;
+
+    // for clues and memory scenes
+    Entity *cutscene;
+
+    // for living room
+    Entity *couch1;
+    Entity *couch2;
+    Entity *livingbookshelf;
+    Entity *livingshelf;
+    Entity *livingstairs;
+    Entity *livingstool;
+    Entity *livingtable;
+    Entity *livingtv;
+
+    // for bedroom
+    Entity *bedroombed;
+    Entity *bedroomdresser;
+    Entity *bedroomshelves;
+    Entity *bedroomtable;
+    Entity *bedroomwardrobe;
+    Entity *bedroommirror;
 
     Music bgm;
     Sound stairsSound;

@@ -15,6 +15,7 @@ private:
     Texture2D textureHerShelf;
     Texture2D textureHallwayDoor;
     Texture2D textureBeanbag;
+    Texture2D texturePolaroids;
 
     bool firstTimeDialoguePlayed = false;
     float dialogueDelayTimer = 0.0f;

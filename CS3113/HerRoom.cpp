@@ -16,6 +16,7 @@ void HerRoom::initialise()
     textureHerShelf = LoadTexture("assets/herroom/shelf.PNG");
     textureHallwayDoor = LoadTexture("assets/herroom/hallwaydoor.PNG");
     textureBeanbag = LoadTexture("assets/herroom/beanbag.PNG");
+    texturePolaroids = LoadTexture("assets/herroom/polaroids.PNG");
     mGameState.nextSceneID = -1;
 
     // mGameState.bgm = LoadMusicStream("assets/void.mp3");
@@ -145,6 +146,20 @@ void HerRoom::initialise()
         mGameState.herhallwaydoor->getScale().y + 10.0f
     });
 
+    // ------------ POLAROIDS -------------
+    mGameState.polaroids = new Entity(
+        { -900.0f, -900.0f }, // super off screen rn
+        { (float)texturePolaroids.width,
+        (float)texturePolaroids.height },
+        texturePolaroids,
+        NONE
+    );
+
+    mGameState.polaroids->setColliderDimensions({
+        mGameState.polaroids->getScale().x + 10.0f,
+        mGameState.polaroids->getScale().y + 10.0f
+    });
+
     // ------------ DIALOGUE -------------
     Vector2 dialoguePos = { mOrigin.x , 720.0f - 20.0f - 100.0f }; 
 
@@ -201,6 +216,7 @@ void HerRoom::update(float deltaTime)
     bool nearChair = mGameState.player->isColliding(mGameState.herchair);
     bool nearBeanbag = mGameState.player->isColliding(mGameState.beanbag);
     bool nearBookshelf = mGameState.player->isColliding(mGameState.bookshelf);
+    bool nearPolaroids = mGameState.player->isColliding(mGameState.polaroids);
 
     bool pol1 = Scene::getPol1Status();
     bool pol2 = Scene::getPol2Status();
@@ -214,9 +230,21 @@ void HerRoom::update(float deltaTime)
     }
 
     if (IsKeyPressed(KEY_E) && !mGameState.dialogueActive){
-        if (nearHallwayDoor){
-            mGameState.nextSceneID = 4; // go to hallway
+        if (nearPolaroids){ // when the polaroids are there, send to first clue scene
+            mGameState.nextSceneID = 6; // TODO: CHANGE TO CLUE SCENE
             return;
+        }
+        if (nearHallwayDoor){ // can't leave unless clues are found (maybe change? not needed)
+            if(pol1 && pol2 && pol3 && pol4){ // could just go to hallway bcuz saved
+                mGameState.nextSceneID = 4; // go to hallway
+                return;
+            }
+            else{
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "I haven't found everything yet";
+                mGameState.dialogueStep = 0;
+                return;
+            }
         }
         if (nearShelf && !pol1){ // finding the first polaroid
             Scene::setPol1Status(true);
@@ -255,6 +283,12 @@ void HerRoom::update(float deltaTime)
 
     }
 
+    if (pol1 && pol2 && pol3 && pol4){ // move onto screen once
+        if (mGameState.polaroids->getPosition().x < 0){
+            mGameState.polaroids->setPosition({ 630.0f, 450.0f });  
+        }
+    }
+
     // TODO: Add interaction stuff
     // TODO: Fix dialogue system so no double clicks
 }
@@ -280,6 +314,8 @@ void HerRoom::render()
     mGameState.beanbag->displayCollider();
     mGameState.herhallwaydoor->render();
     mGameState.herhallwaydoor->displayCollider();
+    mGameState.polaroids->render();
+    mGameState.polaroids->displayCollider();
 
     mGameState.player->render();
     mGameState.player->displayCollider();
@@ -305,13 +341,14 @@ void HerRoom::render()
     bool nearChair = mGameState.player->isColliding(mGameState.herchair);
     bool nearBeanbag = mGameState.player->isColliding(mGameState.beanbag);
     bool nearBookshelf = mGameState.player->isColliding(mGameState.bookshelf);
+    bool nearPolaroids = mGameState.player->isColliding(mGameState.polaroids);
     bool pol1 = Scene::getPol1Status();
     bool pol2 = Scene::getPol2Status();
     bool pol3 = Scene::getPol3Status();
     bool pol4 = Scene::getPol4Status();
 
     if (nearHallwayDoor || (nearBed && !pol3) || (nearShelf && !pol1) || (nearTable && !pol2) || nearChair ||
-        (nearBeanbag && !pol4) || nearBookshelf){
+        (nearBeanbag && !pol4) || nearBookshelf || nearPolaroids){
         int screenW = GetScreenWidth();
         int screenH = GetScreenHeight();
         const char *hint = "[E] to Interact";
@@ -340,6 +377,7 @@ void HerRoom::shutdown()
     delete mGameState.hershelf;
     delete mGameState.herhallwaydoor;
     delete mGameState.beanbag;
+    delete mGameState.polaroids;
 
     UnloadTexture(textureDialogueBox);
     // UnloadMusicStream(mGameState.bgm);
