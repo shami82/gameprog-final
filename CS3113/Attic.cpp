@@ -37,7 +37,8 @@ void Attic::initialise()
 
     mGameState.player = new Entity(
         {600.0f, 535.0f},            // starting position
-        {100.0f, 155.0f},        // player scale
+        {static_cast<float>(texturePlayer.width)/4.0f,
+         static_cast<float>(texturePlayer.height)/4.0f},
         texturePlayer,
         ATLAS,
         { 4, 4 },                // sprite sheet dimensions
@@ -46,8 +47,8 @@ void Attic::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x - 20.0f , // TODO: make little smaller?
-        mGameState.player->getScale().y - 60.0f  // TODO: make little smaller?
+        mGameState.player->getScale().x * 0.9f , // TODO: make little smaller?
+        mGameState.player->getScale().y * 0.9f  // TODO: make little smaller?
     });
     mGameState.player->setSpeed(150);
     mGameState.player->setDirection(UP); // facing the things in the room
@@ -104,6 +105,12 @@ void Attic::initialise()
         mGameState.atticdoor->getScale().y + 10.0f
     });
 
+    collidables.clear();
+    collidables.push_back(mGameState.wardrobe);
+    collidables.push_back(mGameState.chest);
+    collidables.push_back(mGameState.album);
+    collidables.push_back(mGameState.atticdoor);
+
     // ------------ DIALOGUE -------------
     Vector2 dialoguePos = { mOrigin.x , 720.0f - 20.0f - 100.0f }; 
 
@@ -119,7 +126,12 @@ void Attic::initialise()
 void Attic::update(float deltaTime)
 {
     // UpdateMusicStream(mGameState.bgm);
-    mGameState.player->update(deltaTime, nullptr, nullptr, 0);
+    // make a vector and pass that here for the vector of entities
+    // mGameState.player->update(deltaTime, nullptr, nullptr, 0);
+    mGameState.player->update(deltaTime,
+                          mGameState.player,
+                          collidables,
+                          (int)collidables.size());
     if (IsKeyDown(KEY_A)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_D)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_W)) mGameState.player->animate(deltaTime);

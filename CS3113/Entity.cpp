@@ -91,18 +91,32 @@ void Entity::checkCollisionX(Entity *collidableEntities, int collisionCheckCount
     }
 }
 
-bool Entity::isColliding(Entity *other) const 
+// bool Entity::isColliding(Entity *other) const 
+// {
+//     if (!other->isActive() || other == this) return false;
+
+//     float xDistance = fabs(mPosition.x - other->getPosition().x) - 
+//         ((mColliderDimensions.x + other->getColliderDimensions().x) / 2.0f);
+//     float yDistance = fabs(mPosition.y - other->getPosition().y) - 
+//         ((mColliderDimensions.y + other->getColliderDimensions().y) / 2.0f);
+
+//     if (xDistance < 0.0f && yDistance < 0.0f) return true;
+
+//     return false;
+// }
+
+bool Entity::isColliding(Entity* other) const
 {
-    if (!other->isActive() || other == this) return false;
+    if (!other || !other->isActive() || other == this)
+        return false;
 
-    float xDistance = fabs(mPosition.x - other->getPosition().x) - 
-        ((mColliderDimensions.x + other->getColliderDimensions().x) / 2.0f);
-    float yDistance = fabs(mPosition.y - other->getPosition().y) - 
-        ((mColliderDimensions.y + other->getColliderDimensions().y) / 2.0f);
+    float xDistance = fabs(mPosition.x - other->mPosition.x) -
+               ((mColliderDimensions.x + other->mColliderDimensions.x) * 0.5f);
 
-    if (xDistance < 0.0f && yDistance < 0.0f) return true;
+    float yDistance = fabs(mPosition.y - other->mPosition.y) -
+               ((mColliderDimensions.y + other->mColliderDimensions.y) * 0.5f);
 
-    return false;
+    return (xDistance < 0 && yDistance < 0);
 }
 
 void Entity::animate(float deltaTime)
@@ -121,14 +135,83 @@ void Entity::animate(float deltaTime)
     }
 }
 
+// CREATE A NEW UPDATE THAT WOULD CHECK EACH ONE
 void Entity::update(float deltaTime, Entity *player, 
     Entity *collidableEntities, int collisionCheckCount)
 {
+    
     mPosition.x += mMovement.x * mSpeed * deltaTime;
+    checkCollisionX(collidableEntities, collisionCheckCount);
     mPosition.y += mMovement.y * mSpeed * deltaTime;
+    checkCollisionY(collidableEntities, collisionCheckCount);
 
     // no gravity or physics or accelerations
     return;
+}
+
+// this new update function lets the player not completely walk over entities 
+// accepts a vector of entities since every entity is different
+// has a soft overlap so that theres still interactions possible through collisions
+void Entity::update(float deltaTime, Entity* player,
+                    const std::vector<Entity*>& collidables, int count)
+{
+    resetColliderFlags();
+
+    static constexpr float SOFT_OVERLAP = 10.0f; // so it can intersect just a smidge
+
+    float oldX = mPosition.x;
+    mPosition.x += mMovement.x * mSpeed * deltaTime;
+
+    for (int i = 0; i < count; i++){
+        Entity* other = collidables[i];
+        if (!other || !other->isActive() || other == this) continue;
+
+        if (isColliding(other)){
+            float d = mPosition.x - other->mPosition.x;
+            float totalHalfWidth =
+                (mColliderDimensions.x + other->mColliderDimensions.x) * 0.5f;
+
+            float overlap = totalHalfWidth - fabsf(d);
+
+            if (overlap > SOFT_OVERLAP){
+                mPosition.x = oldX;
+
+                if (d > 0) mIsCollidingLeft  = true;
+                else      mIsCollidingRight = true;
+            }
+            else{
+                mIsCollidingLeft  = (d > 0);
+                mIsCollidingRight = (d < 0);
+            }
+        }
+    }
+
+    float oldY = mPosition.y;
+    mPosition.y += mMovement.y * mSpeed * deltaTime;
+
+    for (int i = 0; i < count; i++){
+        Entity* other = collidables[i];
+        if (!other || !other->isActive() || other == this) continue;
+
+        if (isColliding(other)){
+            float d = mPosition.y - other->mPosition.y;
+            float totalHalfHeight =
+                (mColliderDimensions.y + other->mColliderDimensions.y) * 0.5f;
+
+            float overlap = totalHalfHeight - fabsf(d);
+
+            if (overlap > SOFT_OVERLAP){
+                mPosition.y = oldY;
+
+                if (d > 0) mIsCollidingTop    = true;
+                else      mIsCollidingBottom = true;
+            }
+            else{
+                mIsCollidingTop    = (d > 0);
+                mIsCollidingBottom = (d < 0);
+            }
+        }
+    }
 }
 
 void Entity::render()

@@ -81,6 +81,9 @@ public:
 
     void update(float deltaTime, Entity *player, 
         Entity *collidableEntities, int collisionCheckCount);
+    void update(float deltaTime, Entity* player, 
+            const std::vector<Entity*>& collidables, int collisionCheckCount);
+        
     void render();
     void normaliseMovement() { Normalise(&mMovement); }
 
