@@ -11,6 +11,7 @@ void Attic::initialise()
     textureDialogueBox = LoadTexture("assets/dialoguebox.PNG");
     textureAtticDoor = LoadTexture("assets/attic/atticdoor.PNG");
     textureChest = LoadTexture("assets/attic/chest1.PNG");
+    textureChestSolved = LoadTexture("assets/attic/chest2.PNG");
     textureWardrobe = LoadTexture("assets/attic/wardrobe1.PNG");
     textureAlbum = LoadTexture("assets/attic/album1.PNG");
     mGameState.nextSceneID = -1;
@@ -67,8 +68,8 @@ void Attic::initialise()
     // ------------ CHEST -------------
     mGameState.chest = new Entity(
         {280.0f, 445.0f},
-        {static_cast<float>(textureChest.width),
-         static_cast<float>(textureChest.height)},
+        {static_cast<float>(textureChest.width) * 0.8f,
+         static_cast<float>(textureChest.height) * 0.8f},
         textureChest,
         NONE
     );
@@ -124,19 +125,50 @@ void Attic::update(float deltaTime)
     if (IsKeyDown(KEY_W)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_S)) mGameState.player->animate(deltaTime);
 
-    static bool completedPuz1 = false;
-    static bool completedPuz2 = false;
-    static bool completedPuz3 = false;
-
     bool nearChest = mGameState.player->isColliding(mGameState.chest);
     bool nearWardrobe = mGameState.player->isColliding(mGameState.wardrobe);
     bool nearAlbum = mGameState.player->isColliding(mGameState.album);
     bool nearAtticDoor = mGameState.player->isColliding(mGameState.atticdoor);
 
+    // PUZZLE 1 LOGIC FOR ENTERIGN TEH COMBO
+    if (enteringCode){ // entering the code
+        int key = GetCharPressed(); // reading typed numbers
+        while (key > 0){
+            if (key >= '0' && key <= '9'){ // read only numbers
+                if (currentCode.size() < 4)
+                    currentCode.push_back((char)key);
+            }
+
+            key = GetCharPressed(); // read the next one
+        }
+
+        if (currentCode.size() == 4){ // submitting the code entered
+            if (currentCode == correctCode){ // success condition
+                Scene::setPuz1Status(true);
+                mGameState.chest->setTexture(textureChestSolved);
+
+                enteringCode = false;
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "it opened...";
+                currentCode.clear();
+                return;
+            }
+            else{ // fail condition
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "no, that's not it";
+                enteringCode = false;
+                currentCode.clear();
+                return;
+            }
+        }
+
+        return;
+    }
+
     if (mGameState.dialogueActive && IsKeyPressed(KEY_E)){ // multiple dialogue things
-        if (nearChest && !completedPuz1 && mGameState.dialogueStep == 0){
+        if (nearChest && !Scene::getPuz1Status() && mGameState.dialogueStep == 0){
             mGameState.dialogueStep = 1;
-            mGameState.dialogueText = "I need to remember the combination";
+            mGameState.dialogueText = "I need to remmeber the combination...";
             return;
         }
 
@@ -150,17 +182,31 @@ void Attic::update(float deltaTime)
             mGameState.nextSceneID = 4; // go to hallway
             return;
         }
-        if (nearChest && !completedPuz1){ // puz1 interaction
-            mGameState.dialogueActive = true;
-            mGameState.dialogueStep = 0;
-            mGameState.dialogueText = "It's locked";
+        if (nearChest && !Scene::getPuz1Status()){ // puzzle 1 interaction
+            if (IsKeyPressed(KEY_E) && !mGameState.dialogueActive){ // regular dialogue
+                if (Scene::getPol1Status() && Scene::getPol2Status() 
+                    && Scene::getPol3Status() && Scene::getPol4Status()){ // unlock combo login
+                    enteringCode = true;
+                    currentCode.clear();
+
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "Enter the 4-digit combination:";
+                }
+                else{ // not all polaroids found
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueStep = 0;
+                    mGameState.dialogueText = "It's locked";
+                }
+
+                return;
+            }
         } 
-        if (nearWardrobe && !completedPuz2){
+        if (nearWardrobe && !Scene::getPuz1Status()){
             mGameState.dialogueActive = true;
             mGameState.dialogueText = "No... not yet";
             return;
         }
-        if (nearAlbum && !completedPuz3){
+        if (nearAlbum && !Scene::getPuz2Status()){
             mGameState.dialogueActive = true;
             mGameState.dialogueText = "No... not yet";
             return;
@@ -202,6 +248,21 @@ void Attic::render()
             24, 
             WHITE
         );
+
+        if (enteringCode){ // for the combo login
+            std::string display = currentCode;
+            while (display.size() < 4)
+                display.push_back('_'); // show the missing spots
+
+            DrawText(
+                display.c_str(),
+                textX,
+                textY + 40,
+                32,
+                WHITE
+            );
+
+        }
     }
 
     bool nearChest = mGameState.player->isColliding(mGameState.chest);
@@ -238,7 +299,7 @@ void Attic::shutdown()
     delete mGameState.chest;
     delete mGameState.wardrobe;
     delete mGameState.album;
-
+    // TODO: double check unloading both closed and open puzzle textures
     UnloadTexture(textureDialogueBox);
     // UnloadMusicStream(mGameState.bgm);
 }

@@ -90,7 +90,7 @@ void Clue1::update(float deltaTime)
             mGameState.cutscene->setTexture(textureClue1Clear);
             stage = STAGE_SHOW_CLEAR;
             mGameState.dialogueActive = true;
-            mGameState.dialogueText = "No, I got this, this is okay";
+            mGameState.dialogueText = "No, I know I can do this";
             mGameState.dialogueStep = 0;
             return;
         }

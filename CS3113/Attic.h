@@ -13,6 +13,11 @@ private:
     Texture2D textureWardrobe;
     Texture2D textureAlbum;
 
+    bool enteringCode = false;
+    std::string currentCode = "";
+    const std::string correctCode = "0812"; // first puzzle answer
+    Texture2D textureChestSolved;
+
 public:
 
     Attic();
