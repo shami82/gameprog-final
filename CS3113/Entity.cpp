@@ -159,8 +159,8 @@ void Entity::update(float deltaTime, Entity* player,
 
     static constexpr float SOFT_OVERLAP = 10.0f; // so it can intersect just a smidge
 
-    float oldX = mPosition.x;
-    mPosition.x += mMovement.x * mSpeed * deltaTime;
+    float deltaX = mMovement.x * mSpeed * deltaTime;
+    mPosition.x += deltaX;
 
     for (int i = 0; i < count; i++){
         Entity* other = collidables[i];
@@ -174,20 +174,20 @@ void Entity::update(float deltaTime, Entity* player,
             float overlap = totalHalfWidth - fabsf(d);
 
             if (overlap > SOFT_OVERLAP){
-                mPosition.x = oldX;
+                bool movingToward = (deltaX > 0 && d < 0) || (deltaX < 0 && d > 0);
 
-                if (d > 0) mIsCollidingLeft  = true;
-                else      mIsCollidingRight = true;
-            }
-            else{
+                if (movingToward){
+                    mPosition.x -= deltaX;
+                }
+
                 mIsCollidingLeft  = (d > 0);
                 mIsCollidingRight = (d < 0);
             }
         }
     }
 
-    float oldY = mPosition.y;
-    mPosition.y += mMovement.y * mSpeed * deltaTime;
+    float deltaY = mMovement.y * mSpeed * deltaTime;
+    mPosition.y += deltaY;
 
     for (int i = 0; i < count; i++){
         Entity* other = collidables[i];
@@ -201,12 +201,12 @@ void Entity::update(float deltaTime, Entity* player,
             float overlap = totalHalfHeight - fabsf(d);
 
             if (overlap > SOFT_OVERLAP){
-                mPosition.y = oldY;
+                bool movingToward = (deltaY > 0 && d < 0) || (deltaY < 0 && d > 0);
 
-                if (d > 0) mIsCollidingTop    = true;
-                else      mIsCollidingBottom = true;
-            }
-            else{
+                if (movingToward){
+                    mPosition.y -= deltaY;
+                }
+
                 mIsCollidingTop    = (d > 0);
                 mIsCollidingBottom = (d < 0);
             }
