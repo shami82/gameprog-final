@@ -21,6 +21,7 @@ private:
     float drainPerSecond = 5.0f; // drain rate
     // int maxTapsForAutoWin = 30; // MIGHT REMOVE depends on difficulty
 
+    bool tappedOnce = false;
     bool showExitPrompt = false;
 
 public:

@@ -53,6 +53,7 @@ void Clue1::initialise()
     minigameTimer = 0.0f;
     fillAmount = 0.0f;
     // tapCount = 0;
+    tappedOnce = false;
 
     showExitPrompt = false;
 }
@@ -74,6 +75,7 @@ void Clue1::update(float deltaTime)
     if (stage == STAGE_MINIGAME && minigameActive){
         if (IsKeyPressed(KEY_P)){ // counting the P key taps
             fillAmount += fillPerTap;
+            tappedOnce = true;
             // tapCount++;
             if (fillAmount > fillTarget) fillAmount = fillTarget;
         }
@@ -95,11 +97,11 @@ void Clue1::update(float deltaTime)
             return;
         }
 
-        // TODO: UPDATE FAIL TO LOSE SCREEN
-        if (minigameTimer >= minigameDuration){ // fail RETRY FOR NOW
-            minigameTimer = 0.0f;
-            fillAmount = 0.0f;
-            // tapCount = 0;
+        if ((minigameTimer >= minigameDuration) 
+            || (tappedOnce && fillAmount == 0.0f)){ // fail go to bad end
+            minigameActive = false;
+            mGameState.nextSceneID = 7;
+            return;
         }
     }
 
