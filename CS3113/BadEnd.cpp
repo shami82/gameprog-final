@@ -146,4 +146,5 @@ void BadEnd::shutdown()
     UnloadTexture(textureBad4);
     UnloadTexture(textureBad5);
     UnloadTexture(textureBad6);
+    UnloadTexture(textureDialogueBox);
 }

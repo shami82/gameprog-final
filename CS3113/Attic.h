@@ -10,15 +10,17 @@ private:
     Texture2D textureDialogueBox;
     Texture2D textureAtticDoor;
     Texture2D textureChest;
+    Texture2D textureChestSolved;
     Texture2D textureWardrobe;
+    Texture2D textureWardrobeSolved;
     Texture2D textureAlbum;
+    Texture2D textureAlbumSolved;
 
     std::vector<Entity*> collidables;
 
     bool enteringCode = false;
     std::string currentCode = "";
     const std::string correctCode = "0812"; // first puzzle answer
-    Texture2D textureChestSolved;
     
 
 public:

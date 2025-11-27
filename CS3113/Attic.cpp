@@ -13,7 +13,9 @@ void Attic::initialise()
     textureChest = LoadTexture("assets/attic/chest1.PNG");
     textureChestSolved = LoadTexture("assets/attic/chest2.PNG");
     textureWardrobe = LoadTexture("assets/attic/wardrobe1.PNG");
+    textureWardrobeSolved = LoadTexture("assets/attic/wardrobe2.PNG");
     textureAlbum = LoadTexture("assets/attic/album1.PNG");
+    textureAlbumSolved = LoadTexture("assets/attic/album2.PNG");
     mGameState.nextSceneID = -1;
 
     // mGameState.bgm = LoadMusicStream("assets/void.mp3");
@@ -65,6 +67,10 @@ void Attic::initialise()
         mGameState.wardrobe->getScale().x + 10.0f, // little bigger?
         mGameState.wardrobe->getScale().y + 10.0f
     });
+
+    if (Scene::getPuz2Status()){ // when returning to attic after completing puzzle2
+        mGameState.wardrobe->setTexture(textureWardrobeSolved);
+    }
     
     // ------------ CHEST -------------
     mGameState.chest = new Entity(
@@ -78,6 +84,10 @@ void Attic::initialise()
         mGameState.chest->getScale().x + 10.0f, // little bigger?
         mGameState.chest->getScale().y + 10.0f
     });
+
+    if (Scene::getPuz1Status()){ // when returning to attic after completing puzzle1
+        mGameState.chest->setTexture(textureChestSolved);
+    }
     
     // ------------ ALBUM -------------
     mGameState.album = new Entity(
@@ -91,6 +101,10 @@ void Attic::initialise()
         mGameState.album->getScale().x + 10.0f, // little bigger?
         mGameState.album->getScale().y + 10.0f
     });
+
+    if (Scene::getPuz3Status()){ // when returning to attic after completing puzzle3
+        mGameState.album->setTexture(textureAlbumSolved);
+    }
     
     // ------------ ATTIC DOOR -------------
     mGameState.atticdoor = new Entity(
@@ -177,8 +191,15 @@ void Attic::update(float deltaTime)
         return;
     }
 
-    if (mGameState.dialogueActive && IsKeyPressed(KEY_E)){ // multiple dialogue things
-        if (nearChest && !Scene::getPuz1Status() && mGameState.dialogueStep == 0){
+    if (mGameState.dialogueActive && IsKeyPressed(KEY_E)){ // special case for if it opened
+        if (nearChest && mGameState.dialogueText == "it opened..."){
+            mGameState.dialogueActive = false;
+            mGameState.dialogueStep = 0;
+            mGameState.nextSceneID = 8; // go to mem1
+            return;
+        }
+
+        if (nearChest && !Scene::getPuz1Status() && mGameState.dialogueStep == 0){ // regular dialogue
             mGameState.dialogueStep = 1;
             mGameState.dialogueText = "I need to remmeber the combination...";
             return;
