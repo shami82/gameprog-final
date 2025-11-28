@@ -136,7 +136,7 @@ void Mem1::update(float deltaTime)
 
             case 11: // after flashing now 11
                 mGameState.cutscene->setTexture(textureMem11);
-                mGameState.dialogueText = "she really did like it til the end";
+                mGameState.dialogueText = "...she really did like it til the end";
                 break;
 
             case 12:

@@ -1,384 +1,438 @@
-// #include "LivingRoom.h"
+#include "LivingRoom.h"
 
-// LivingRoom::LivingRoom() : Scene({0.0f}, nullptr) {}
-// LivingRoom::LivingRoom(Vector2 origin, const char *bgHexCode) : Scene(origin, bgHexCode) {}
-// LivingRoom::~LivingRoom() { shutdown(); }
+LivingRoom::LivingRoom() : Scene({0.0f}, nullptr) {}
+LivingRoom::LivingRoom(Vector2 origin, const char *bgHexCode) : Scene(origin, bgHexCode) {}
+LivingRoom::~LivingRoom() { shutdown(); }
 
-// void LivingRoom::initialise()
-// {
-//     textureBG = LoadTexture("assets/herroom/herroom.PNG");
-//     texturePlayer = LoadTexture("assets/player.PNG");
-//     textureDialogueBox = LoadTexture("assets/dialoguebox.PNG");
-//     textureCouch1 = LoadTexture("assets/livingroom/couch1.PNG");
-//     textureCouch2 = LoadTexture("assets/livingroom/couch2.PNG");;
-//     textureLivingBookShelf = LoadTexture("assets/livingroom/livingbookshelf.PNG");;
-//     textureLivingShelf = LoadTexture("assets/livingroom/livingshelf.PNG");;
-//     textureLivingStairs = LoadTexture("assets/livingroom/livingstairs.PNG");;
-//     textureLivingStool = LoadTexture("assets/livingroom/livingstool.PNG");;
-//     textureLivingTable = LoadTexture("assets/livingroom/livingtable.PNG");;
-//     textureLivingTV = LoadTexture("assets/livingroom/tv.PNG");;
-//     mGameState.nextSceneID = -1;
+void LivingRoom::initialise()
+{
+    textureBG = LoadTexture("assets/livingroom/livingroom.PNG");
+    texturePlayer = LoadTexture("assets/player.PNG");
+    textureDialogueBox = LoadTexture("assets/dialoguebox.PNG");
+    textureCouch1 = LoadTexture("assets/livingroom/couch1.PNG");
+    textureCouch2 = LoadTexture("assets/livingroom/couch2.PNG");;
+    textureLivingBookShelf = LoadTexture("assets/livingroom/livingbookshelf.PNG");;
+    textureLivingShelf = LoadTexture("assets/livingroom/livingshelf.PNG");;
+    textureLivingStairs = LoadTexture("assets/livingroom/livingstairs.PNG");;
+    textureLivingStool = LoadTexture("assets/livingroom/livingstool.PNG");;
+    textureLivingTable = LoadTexture("assets/livingroom/livingtable.PNG");;
+    textureLivingTV = LoadTexture("assets/livingroom/tv.PNG");;
+    mGameState.nextSceneID = -1;
 
-//     // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-//     // SetMusicVolume(mGameState.bgm, 0.50f);
-//     // PlayMusicStream(mGameState.bgm);
+    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
+    // SetMusicVolume(mGameState.bgm, 0.50f);
+    // PlayMusicStream(mGameState.bgm);
 
-//     mGameState.bg = new Entity(
-//         mOrigin,                                        // position
-//         { 990.0f, 720.0f },                             // size
-//         textureBG,                                      // texture file address
-//         NONE                                            // type
-//     );
+    mGameState.bg = new Entity(
+        mOrigin,                                        // position
+        { 990.0f, 720.0f },                             // size
+        textureBG,                                      // texture file address
+        NONE                                            // type
+    );
 
-//     // ------------ PLAYER -------------
-//     std::map<Direction, std::vector<int>> playerAnimationAtlas = {
-//         {DOWN,  { 0,  1,  2,  3  }},
-//         {UP,    { 4,  5,  6,  7  }},
-//         {RIGHT, { 8,  9,  10, 11 }},
-//         {LEFT,  { 12, 13, 14, 15 }}
-//     };
+    // ------------ PLAYER -------------
+    std::map<Direction, std::vector<int>> playerAnimationAtlas = {
+        {DOWN,  { 0,  1,  2,  3  }},
+        {UP,    { 4,  5,  6,  7  }},
+        {RIGHT, { 8,  9,  10, 11 }},
+        {LEFT,  { 12, 13, 14, 15 }}
+    };
 
-//     mGameState.player = new Entity(
-//         {600.0f, 535.0f},            // starting position
-//         {100.0f, 155.0f},        // player scale
-//         texturePlayer,
-//         ATLAS,
-//         { 4, 4 },                // sprite sheet dimensions
-//         playerAnimationAtlas,
-//         PLAYER
-//     );
+    mGameState.player = new Entity(
+        {700.0f, 155.0f},            // starting position
+        {100.0f * 0.8f, 155.0f * 0.8f},        // SMALLER SPRITE TO SHOW BIGGER ROOM
+        texturePlayer,
+        ATLAS,
+        { 4, 4 },                // sprite sheet dimensions
+        playerAnimationAtlas,
+        PLAYER
+    );
 
-//     mGameState.player->setColliderDimensions({ 
-//         mGameState.player->getScale().x - 20.0f , // TODO: make little smaller?
-//         mGameState.player->getScale().y - 60.0f  // TODO: make little smaller?
-//     });
-//     mGameState.player->setSpeed(150);
-//     mGameState.player->setDirection(UP); // facing the things in the room
+    mGameState.player->setColliderDimensions({ 
+        mGameState.player->getScale().x - 20.0f , // TODO: make little smaller?
+        mGameState.player->getScale().y - 60.0f  // TODO: make little smaller?
+    });
+    mGameState.player->setSpeed(150);
+    mGameState.player->setDirection(LEFT); // facing the things in the room
 
-//     // ------------ HER BED -------------
-//     mGameState.herbed = new Entity(
-//         {500.0f, 265.0f},
-//         {static_cast<float>(textureHerBed.width),
-//          static_cast<float>(textureHerBed.height)},
-//         textureHerBed,
-//         NONE
-//     );
-//     mGameState.herbed->setColliderDimensions({ 
-//         mGameState.herbed->getScale().x + 10.0f, // little bigger?
-//         mGameState.herbed->getScale().y + 10.0f
-//     });
+    // ------------ COUCH1 -------------
+    mGameState.couch1 = new Entity(
+        {557.5f, 290.0f},
+        {static_cast<float>(textureCouch1.width),
+         static_cast<float>(textureCouch1.height)},
+        textureCouch1,
+        NONE
+    );
+    mGameState.couch1->setColliderDimensions({ 
+        mGameState.couch1->getScale().x + 10.0f, // little bigger?
+        mGameState.couch1->getScale().y + 10.0f
+    });
+
+    // ------------ COUCH2 -------------
+    mGameState.couch2 = new Entity(
+        {387.5f, 440.0f},
+        {static_cast<float>(textureCouch2.width),
+         static_cast<float>(textureCouch2.height)},
+        textureCouch2,
+        NONE
+    );
+    mGameState.couch2->setColliderDimensions({ 
+        mGameState.couch2->getScale().x + 10.0f, // little bigger?
+        mGameState.couch2->getScale().y + 10.0f
+    });
     
-//     // ------------ BOOKSHELF -------------
-//     mGameState.bookshelf = new Entity(
-//         {715.0f, 185.0f},
-//         {static_cast<float>(textureBookshelf.width),
-//          static_cast<float>(textureBookshelf.height)},
-//         textureBookshelf,
-//         NONE
-//     );
-//     mGameState.bookshelf->setColliderDimensions({ 
-//         mGameState.bookshelf->getScale().x + 10.0f, // little bigger?
-//         mGameState.bookshelf->getScale().y + 10.0f
-//     });
+    // ------------ LIVING BOOKSHELF -------------
+    mGameState.livingbookshelf = new Entity(
+        {230.0f, 185.0f},
+        {static_cast<float>(textureLivingBookShelf.width),
+         static_cast<float>(textureLivingBookShelf.height)},
+        textureLivingBookShelf,
+        NONE
+    );
+    mGameState.livingbookshelf->setColliderDimensions({ 
+        mGameState.livingbookshelf->getScale().x + 10.0f, // little bigger?
+        mGameState.livingbookshelf->getScale().y + 10.0f
+    });
     
-//     // ------------ HER CHAIR -------------
-//     mGameState.herchair = new Entity(
-//         {316.5f, 482.5f},
-//         {static_cast<float>(textureHerChair.width),
-//          static_cast<float>(textureHerChair.height)},
-//         textureHerChair,
-//         NONE
-//     );
-//     mGameState.herchair->setColliderDimensions({ 
-//         mGameState.herchair->getScale().x + 10.0f, // little bigger?
-//         mGameState.herchair->getScale().y + 10.0f
-//     });
+    // ------------ LIVING SHELF -------------
+    mGameState.livingshelf = new Entity(
+        {811.0f, 530.5f},
+        {static_cast<float>(textureLivingShelf.width),
+         static_cast<float>(textureLivingShelf.height)},
+        textureLivingShelf,
+        NONE
+    );
+    mGameState.livingshelf->setColliderDimensions({ 
+        mGameState.livingshelf->getScale().x + 10.0f, // little bigger?
+        mGameState.livingshelf->getScale().y + 10.0f
+    });
 
-//     // ------------ HER TABLE -------------
-//     mGameState.hertable = new Entity(
-//         {237.5f, 500.0f},
-//         {static_cast<float>(textureHerTable.width),
-//          static_cast<float>(textureHerTable.height)},
-//         textureHerTable,
-//         NONE
-//     );
-//     mGameState.hertable->setColliderDimensions({ 
-//         mGameState.hertable->getScale().x + 10.0f, // little bigger?
-//         mGameState.hertable->getScale().y + 10.0f
-//     });
+    // ------------ LIVING TABLE -------------
+    mGameState.livingtable = new Entity(
+        {524.5f, 442.5f},
+        {static_cast<float>(textureLivingTable.width),
+         static_cast<float>(textureLivingTable.height)},
+        textureLivingTable,
+        NONE
+    );
+    mGameState.livingtable->setColliderDimensions({ 
+        mGameState.livingtable->getScale().x + 10.0f, // little bigger?
+        mGameState.livingtable->getScale().y + 10.0f
+    });
 
-//     // ------------ SHELF -------------
-//     mGameState.hershelf = new Entity(
-//         {762.5f, 360.0f},
-//         {static_cast<float>(textureHerShelf.width),
-//          static_cast<float>(textureHerShelf.height)},
-//         textureHerShelf,
-//         NONE
-//     );
-//     mGameState.hershelf->setColliderDimensions({ 
-//         mGameState.hershelf->getScale().x + 10.0f, // little bigger?
-//         mGameState.hershelf->getScale().y + 10.0f
-//     });
+    // ------------ LIVING STOOL -------------
+    mGameState.livingstool = new Entity(
+        {245.0f, 445.0f},
+        {static_cast<float>(textureLivingStool.width),
+         static_cast<float>(textureLivingStool.height)},
+        textureLivingStool,
+        NONE
+    );
+    mGameState.livingstool->setColliderDimensions({ 
+        mGameState.livingstool->getScale().x + 10.0f, // little bigger?
+        mGameState.livingstool->getScale().y + 10.0f
+    });
 
-//     // ------------ BEANBAG -------------
-//     mGameState.beanbag = new Entity(
-//         {285.0f, 262.5f},
-//         {static_cast<float>(textureBeanbag.width),
-//          static_cast<float>(textureBeanbag.height)},
-//         textureBeanbag,
-//         NONE
-//     );
-//     mGameState.beanbag->setColliderDimensions({ 
-//         mGameState.beanbag->getScale().x + 10.0f, // little bigger?
-//         mGameState.beanbag->getScale().y + 10.0f
-//     });
+    // ------------ LIVING TV -------------
+    mGameState.livingtv = new Entity(
+        {807.5f, 385.0f},
+        {static_cast<float>(textureLivingTV.width),
+         static_cast<float>(textureLivingTV.height)},
+        textureLivingTV,
+        NONE
+    );
+    mGameState.livingtv->setColliderDimensions({ 
+        mGameState.livingtv->getScale().x + 10.0f, // little bigger?
+        mGameState.livingtv->getScale().y + 10.0f
+    });
     
-//     // ------------ HALLWAY DOOR -------------
-//     mGameState.herhallwaydoor = new Entity(
-//         {670.0f, 620.0f},
-//         {static_cast<float>(textureHallwayDoor.width),
-//          static_cast<float>(textureHallwayDoor.height)},
-//         textureHallwayDoor,
-//         NONE
-//     );
-//     mGameState.herhallwaydoor->setColliderDimensions({ 
-//         mGameState.herhallwaydoor->getScale().x + 10.0f, // little bigger?
-//         mGameState.herhallwaydoor->getScale().y + 10.0f
-//     });
+    // ------------ LIVING STAIRS -------------
+    mGameState.livingstairs = new Entity(
+        {835.0f, 182.5f},
+        {static_cast<float>(textureLivingStairs.width),
+         static_cast<float>(textureLivingStairs.height)},
+        textureLivingStairs,
+        NONE
+    );
+    mGameState.livingstairs->setColliderDimensions({ 
+        mGameState.livingstairs->getScale().x + 10.0f, // little bigger?
+        mGameState.livingstairs->getScale().y + 10.0f
+    });
 
-//     // ------------ POLAROIDS -------------
-//     mGameState.polaroids = new Entity(
-//         { -900.0f, -900.0f }, // super off screen rn
-//         { (float)texturePolaroids.width,
-//         (float)texturePolaroids.height },
-//         texturePolaroids,
-//         NONE
-//     );
+    // ------------ DIALOGUE -------------
+    Vector2 dialoguePos = { mOrigin.x , 720.0f - 20.0f - 100.0f }; 
 
-//     mGameState.polaroids->setColliderDimensions({
-//         mGameState.polaroids->getScale().x + 10.0f,
-//         mGameState.polaroids->getScale().y + 10.0f
-//     });
+    mGameState.dialoguebox = new Entity(
+        dialoguePos,
+        {775.0f, 155.0f},
+        textureDialogueBox,
+        NONE
+    );
 
-//     // ------------ DIALOGUE -------------
-//     Vector2 dialoguePos = { mOrigin.x , 720.0f - 20.0f - 100.0f }; 
+    if (!Scene::getPuz2Status()){
+        if (!firstTimeDialoguePlayed){ // entering room for first time
+            waitingForIntroDialogue = true;
+            dialogueDelayTimer = 0.0f;
+            firstTimeDialoguePlayed = true;
+        }
+    }
 
-//     mGameState.dialoguebox = new Entity(
-//         dialoguePos,
-//         {775.0f, 155.0f},
-//         textureDialogueBox,
-//         NONE
-//     );
+}
 
-//     if (!Scene::getPuzStatus()){
-//         if (!firstTimeDialoguePlayed){ // entering room for first time
-//             waitingForIntroDialogue = true;
-//             dialogueDelayTimer = 0.0f;
-//             firstTimeDialoguePlayed = true;
-//         }
-//     }
+void LivingRoom::update(float deltaTime)
+{
+    // UpdateMusicStream(mGameState.bgm);
 
-// }
+    // TODO: add the E key interact thing for the dialogue
+    if (waitingForIntroDialogue){ // timer before intro dialogue
+        dialogueDelayTimer += deltaTime;
 
-// void LivingRoom::update(float deltaTime)
-// {
-//     // UpdateMusicStream(mGameState.bgm);
-
-//     // TODO: add the E key interact thing for the dialogue
-//     if (waitingForIntroDialogue){ // timer before intro dialogue
-//         dialogueDelayTimer += deltaTime;
-
-//         if (dialogueDelayTimer >= 0.2f){
-//             waitingForIntroDialogue = false;
-//             int screenW = GetScreenWidth();
-//             int screenH = GetScreenHeight();
-//             mGameState.dialogueActive = true;
-//             mGameState.dialogueStep = 0;
-//             mGameState.dialogueText =
-//                 "I haven't been here in a while...";
+        if (dialogueDelayTimer >= 0.2f){
+            waitingForIntroDialogue = false;
+            int screenW = GetScreenWidth();
+            int screenH = GetScreenHeight();
+            mGameState.dialogueActive = true;
+            mGameState.dialogueStep = 0;
+            mGameState.dialogueText =
+                "Something's missing here...";
             
-//             return;
-//         }
-//     }
+            return;
+        }
+    }
 
-//     mGameState.player->update(deltaTime, nullptr, nullptr, 0);
-//     if (IsKeyDown(KEY_A)) mGameState.player->animate(deltaTime);
-//     if (IsKeyDown(KEY_D)) mGameState.player->animate(deltaTime);
-//     if (IsKeyDown(KEY_W)) mGameState.player->animate(deltaTime);
-//     if (IsKeyDown(KEY_S)) mGameState.player->animate(deltaTime);
+    mGameState.player->update(deltaTime, nullptr, nullptr, 0);
+    if (IsKeyDown(KEY_A)) mGameState.player->animate(deltaTime);
+    if (IsKeyDown(KEY_D)) mGameState.player->animate(deltaTime);
+    if (IsKeyDown(KEY_W)) mGameState.player->animate(deltaTime);
+    if (IsKeyDown(KEY_S)) mGameState.player->animate(deltaTime);
 
-//     static bool completedPuz1 = Scene::getPuz1Status();
+    bool nearCouch1 = mGameState.player->isColliding(mGameState.couch1);
+    bool nearCouch2 = mGameState.player->isColliding(mGameState.couch2);
+    bool nearBookShelf = mGameState.player->isColliding(mGameState.livingbookshelf);
+    bool nearShelf = mGameState.player->isColliding(mGameState.livingshelf);
+    bool nearTable = mGameState.player->isColliding(mGameState.livingtable);
+    bool nearTV = mGameState.player->isColliding(mGameState.livingtv);
+    bool nearStool = mGameState.player->isColliding(mGameState.livingstool);
+    bool nearStairs = mGameState.player->isColliding(mGameState.livingstairs);
 
-//     bool nearHallwayDoor = mGameState.player->isColliding(mGameState.herhallwaydoor);
-//     bool nearBed = mGameState.player->isColliding(mGameState.herbed);
-//     bool nearShelf = mGameState.player->isColliding(mGameState.hershelf);
-//     bool nearTable = mGameState.player->isColliding(mGameState.hertable);
-//     bool nearChair = mGameState.player->isColliding(mGameState.herchair);
-//     bool nearBeanbag = mGameState.player->isColliding(mGameState.beanbag);
-//     bool nearBookshelf = mGameState.player->isColliding(mGameState.bookshelf);
-//     bool nearPolaroids = mGameState.player->isColliding(mGameState.polaroids);
+    bool picFound = Scene::getPicFound();
+    bool picPlaced = Scene::getPicPlaced();
 
-//     bool pol1 = Scene::getPol1Status();
-//     bool pol2 = Scene::getPol2Status();
-//     bool pol3 = Scene::getPol3Status();
-//     bool pol4 = Scene::getPol4Status();
+    if (IsKeyPressed(KEY_E) && mGameState.dialogueActive){
+        if (nearStool && stoolActivated){
+            if (stoolActivated && mGameState.dialogueActive){
+                if (mGameState.dialogueStep == 0){
+                    mGameState.dialogueStep = 1;
+                    mGameState.dialogueText = "I need to find it";
+                    return;
+                }
+                else if (mGameState.dialogueStep == 1){
+                    mGameState.dialogueActive = false;
+                    mGameState.dialogueStep = 0;
+                    if (hidingSpot == -1)
+                        hidingSpot = (rand() % 6) + 1;
 
-//     if (mGameState.dialogueActive && IsKeyPressed(KEY_E)){
-//         mGameState.dialogueActive = false;
-//         mGameState.dialogueStep = 0;
-//         return;
-//     }
+                    return;
+                }
+            }
+        }
+        else{
+            mGameState.dialogueActive = false;
+            mGameState.dialogueStep = 0;
+            return;
+        }
+    }
 
-//     if (IsKeyPressed(KEY_E) && !mGameState.dialogueActive){
-//         if (nearPolaroids){ // when the polaroids are there, send to first clue scene
-//             mGameState.nextSceneID = 5; // TODO: CHANGE TO CLUE SCENE
-//             return;
-//         }
-//         if (nearHallwayDoor){ // can't leave unless clues are found (maybe change? not needed)
-//             if(pol1 && pol2 && pol3 && pol4){ // could just go to hallway bcuz saved
-//                 mGameState.nextSceneID = 4; // go to hallway
-//                 return;
-//             }
-//             else{
-//                 mGameState.dialogueActive = true;
-//                 mGameState.dialogueText = "I haven't found everything yet";
-//                 mGameState.dialogueStep = 0;
-//                 return;
-//             }
-//         }
-//         if (nearShelf && !pol1){ // finding the first polaroid
-//             Scene::setPol1Status(true);
-//             mGameState.dialogueActive = true;
-//             mGameState.dialogueText = "I found the first polaroid.";
-//             mGameState.dialogueStep = 0;
-//             return;
-//         }
-//         if (nearTable && !pol2){ // finding the second polaroid
-//             Scene::setPol2Status(true);
-//             mGameState.dialogueActive = true;
-//             mGameState.dialogueText = "I found the second polaroid.";
-//             mGameState.dialogueStep = 0;
-//             return;
-//         }
-//         if (nearBed && !pol3){ // finding the third polaroid
-//             Scene::setPol3Status(true);
-//             mGameState.dialogueActive = true;
-//             mGameState.dialogueText = "I found the third polaroid.";
-//             mGameState.dialogueStep = 0;
-//             return;
-//         }
-//         if (nearBeanbag && !pol4){ // finding the second polaroid
-//             Scene::setPol4Status(true);
-//             mGameState.dialogueActive = true;
-//             mGameState.dialogueText = "I found the fourth polaroid.";
-//             mGameState.dialogueStep = 0;
-//             return;
-//         }
-//         if (nearChair || nearBookshelf){ // decoys
-//             mGameState.dialogueActive = true;
-//             mGameState.dialogueText = "I don't think it was here.";
-//             mGameState.dialogueStep = 0;
-//             return;
-//         }
+    if (IsKeyPressed(KEY_E) && !mGameState.dialogueActive){
+        if (nearStairs){ // can't leave unless clues are found (maybe change? not needed)
+            if(picPlaced){ // could just go to hallway bcuz saved
+                mGameState.nextSceneID = 4; // go to hallway
+                return;
+            }
+            else{
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "I haven't gotten it yet";
+                mGameState.dialogueStep = 0;
+                return;
+            }
+        }
+        if (nearStool){
+            if (picFound && !picPlaced){ // if pic found then place the pic
+                Scene::setPicPlacedStatus(true);
+                mGameState.nextSceneID = 4; // TODO: CHANGE TO CLUE SCENE
+                return;
+            }
+            if (!stoolActivated){
+                stoolActivated = true;
+                mGameState.dialogueActive = true;
+                mGameState.dialogueStep = 0;
+                mGameState.dialogueText = "Oh.. our picture";
+                return;
+            }
+        }
 
-//     }
+        // nothing should be interactable until the stool is interacted with
+        if (!stoolActivated) return;
 
-//     if (pol1 && pol2 && pol3 && pol4){ // move onto screen once
-//         if (mGameState.polaroids->getPosition().x < 0){
-//             mGameState.polaroids->setPosition({ 630.0f, 450.0f });  
-//         }
-//     }
+        // all the hiding spots
+        if (!picFound){
+            if (nearCouch1){ // 1 for couch1
+                if (hidingSpot == 1){
+                    Scene::setPicFoundStatus(true);
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "Ah... here it is";
+                } 
+                else{
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "No, it's not here";
+                }
+                return;
+            }
 
-//     // TODO: Add interaction stuff
-//     // TODO: Fix dialogue system so no double clicks
-// }
+            if (nearCouch2){ // 2 for couch2
+                if (hidingSpot == 2){
+                    Scene::setPicFoundStatus(true);
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "Ah... here it is";
+                }
+                else{
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "No, it's not here";
+                }
+                return;
+            }
 
-// void LivingRoom::render()
-// {
-//     ClearBackground(BLACK);
+            if (nearBookShelf){ // 3 for bookshelf
+                if (hidingSpot == 3){
+                    Scene::setPicFoundStatus(true);
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "Ah... here it is";
+                } 
+                else{
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "No, it's not here";
+                }
+                return;
+            }
 
-//     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
-//     mGameState.bg->render();
-//     // mGameState.bg->displayCollider();
-//     mGameState.herbed->render();
-//     mGameState.herbed->displayCollider();
-//     mGameState.hershelf->render();
-//     mGameState.hershelf->displayCollider();
-//     mGameState.bookshelf->render();
-//     mGameState.bookshelf->displayCollider();
-//     mGameState.herchair->render();
-//     mGameState.herchair->displayCollider();
-//     mGameState.hertable->render();
-//     mGameState.hertable->displayCollider();
-//     mGameState.beanbag->render();
-//     mGameState.beanbag->displayCollider();
-//     mGameState.herhallwaydoor->render();
-//     mGameState.herhallwaydoor->displayCollider();
-//     mGameState.polaroids->render();
-//     mGameState.polaroids->displayCollider();
+            if (nearShelf){ // 4 for shelf
+                if (hidingSpot == 4){
+                    Scene::setPicFoundStatus(true);
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "Ah... here it is";
+                } 
+                else{
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "No, it's not here";
+                }
+                return;
+            }
 
-//     mGameState.player->render();
-//     mGameState.player->displayCollider();
+            if (nearTable){ //5 for table
+                if (hidingSpot == 5){
+                    Scene::setPicFoundStatus(true);
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "Ah... here it is";
+                }
+                else{
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "No, it's not here";
+                }
+                return;
+            }
 
-//     if (mGameState.dialogueActive){
-//         mGameState.dialoguebox->render();
-        
-//         int textX = static_cast<int>(mGameState.dialoguebox->getPosition().x - mGameState.dialoguebox->getScale().x / 2 + 35);
-//         int textY = static_cast<int>(mGameState.dialoguebox->getPosition().y - mGameState.dialoguebox->getScale().y / 2 + 35);
+            if (nearTV){ // 6 for tv
+                if (hidingSpot == 6){
+                    Scene::setPicFoundStatus(true);
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "Ah... here it is";
+                }
+                else{
+                    mGameState.dialogueActive = true;
+                    mGameState.dialogueText = "No, it's not here";
+                }
+                return;
+            }
+        }
+    }
 
-//         DrawText(
-//             mGameState.dialogueText.c_str(), 
-//             textX, textY, 
-//             24, 
-//             WHITE
-//         );
-//     }
+    // TODO: Add interaction stuff
+    // TODO: Fix dialogue system so no double clicks
+}
 
-//     bool nearHallwayDoor = mGameState.player->isColliding(mGameState.herhallwaydoor);
-//     bool nearBed = mGameState.player->isColliding(mGameState.herbed);
-//     bool nearShelf = mGameState.player->isColliding(mGameState.hershelf);
-//     bool nearTable = mGameState.player->isColliding(mGameState.hertable);
-//     bool nearChair = mGameState.player->isColliding(mGameState.herchair);
-//     bool nearBeanbag = mGameState.player->isColliding(mGameState.beanbag);
-//     bool nearBookshelf = mGameState.player->isColliding(mGameState.bookshelf);
-//     bool nearPolaroids = mGameState.player->isColliding(mGameState.polaroids);
-//     bool pol1 = Scene::getPol1Status();
-//     bool pol2 = Scene::getPol2Status();
-//     bool pol3 = Scene::getPol3Status();
-//     bool pol4 = Scene::getPol4Status();
+void LivingRoom::render()
+{
+    ClearBackground(BLACK);
 
-//     if (nearHallwayDoor || (nearBed && !pol3) || (nearShelf && !pol1) || (nearTable && !pol2) || nearChair ||
-//         (nearBeanbag && !pol4) || nearBookshelf || nearPolaroids){
-//         int screenW = GetScreenWidth();
-//         int screenH = GetScreenHeight();
-//         const char *hint = "[E] to Interact";
+    // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
+    mGameState.bg->render();
+    // mGameState.bg->displayCollider();
+    mGameState.couch1->render();
+    mGameState.couch1->displayCollider();
+    mGameState.couch2->render();
+    mGameState.couch2->displayCollider();
+    mGameState.livingbookshelf->render();
+    mGameState.livingbookshelf->displayCollider();
+    mGameState.livingshelf->render();
+    mGameState.livingshelf->displayCollider();
+    mGameState.livingtable->render();
+    mGameState.livingtable->displayCollider();
+    mGameState.livingstool->render();
+    mGameState.livingstool->displayCollider();
+    mGameState.livingtv->render();
+    mGameState.livingtv->displayCollider();
+    mGameState.livingstairs->render();
+    mGameState.livingstairs->displayCollider();
 
-//         int textW = MeasureText(hint, 24);
+    mGameState.player->render();
+    mGameState.player->displayCollider();
 
-//         DrawText(
-//             hint,
-//             screenW - textW - 20,
-//             screenH - 20 - 24,
-//             24,
-//             WHITE
-//         );
-//     }
+    if (mGameState.dialogueActive){
+        mGameState.dialoguebox->render();
+
+        int x = mGameState.dialoguebox->getPosition().x - mGameState.dialoguebox->getScale().x/2 + 35;
+        int y = mGameState.dialoguebox->getPosition().y - mGameState.dialoguebox->getScale().y/2 + 35;
+
+        DrawText(mGameState.dialogueText.c_str(), x, y, 24, WHITE);
+    }
+
+    bool canInteract = mGameState.player->isColliding(mGameState.couch1) ||
+                       mGameState.player->isColliding(mGameState.couch2) ||
+                       mGameState.player->isColliding(mGameState.livingbookshelf) ||
+                       mGameState.player->isColliding(mGameState.livingshelf) ||
+                       mGameState.player->isColliding(mGameState.livingtable) ||
+                       mGameState.player->isColliding(mGameState.livingstool) ||
+                       mGameState.player->isColliding(mGameState.livingtv) ||
+                       mGameState.player->isColliding(mGameState.livingstairs) ||
+                       mGameState.dialogueActive;
+
+    if (canInteract){
+        const char* hint = "[E] to Interact";
+        int size = 20;
+        int tw = MeasureText(hint, size);
+
+        DrawText(hint,
+            GetScreenWidth() - tw - 20,
+            GetScreenHeight() - size - 20,
+            size,
+            WHITE);
+    }
     
-// }
+}
 
-// void LivingRoom::shutdown()
-// {
-//     delete mGameState.bg;
-//     delete mGameState.player;
-//     delete mGameState.couch1;
-//     delete mGameState.couch2;
-//     delete mGameState.livingbookshelf;
-//     delete mGameState.livingshelf;
-//     delete mGameState.livingstairs;
-//     delete mGameState.livingstool;
-//     delete mGameState.livingtable;
-//     delete mGameState.livingtv;
+void LivingRoom::shutdown()
+{
+    delete mGameState.bg;
+    delete mGameState.player;
+    delete mGameState.couch1;
+    delete mGameState.couch2;
+    delete mGameState.livingbookshelf;
+    delete mGameState.livingshelf;
+    delete mGameState.livingstairs;
+    delete mGameState.livingstool;
+    delete mGameState.livingtable;
+    delete mGameState.livingtv;
 
-//     UnloadTexture(textureDialogueBox);
-//     // UnloadMusicStream(mGameState.bgm);
-// }
+    UnloadTexture(textureDialogueBox);
+    // UnloadMusicStream(mGameState.bgm);
+}

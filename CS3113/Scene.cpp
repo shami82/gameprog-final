@@ -10,6 +10,10 @@ bool Scene::polaroid2Found = false;
 bool Scene::polaroid3Found = false;
 bool Scene::polaroid4Found = false;
 
+// for the second puzzle
+bool Scene::picFound = false;
+bool Scene::picPlaced = false;
+
 Scene::Scene() : mOrigin{{}} {}
 
 Scene::Scene(Vector2 origin, const char *bgHexCode) : mOrigin{origin}, mBGColourHexCode {bgHexCode} 

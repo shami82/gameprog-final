@@ -153,22 +153,22 @@ void Hallway::update(float deltaTime)
         //     mGameState.nextSceneID = 3; // living room
         //     return;
         // }
+        if (nearLivingroomDoor){
+            if (!Scene::getPuz1Status()){ // can only go after puzzle 2 complete
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "Wait, no, this isn't the place";
+                return;
+            }
+            mGameState.nextSceneID = 9; // TODO: CHANGE TO LIVINGROOM
+            return;
+        }
         if (nearBedroomDoor){
-            if (!Scene::getPuz1Status()){ // can only go after puzzle 1 complete
+            if (!Scene::getPuz2Status()){ // can only go after puzzle 1 complete
                 mGameState.dialogueActive = true;
                 mGameState.dialogueText = "Wait, no, this isn't the place";
                 return;
             }
             mGameState.nextSceneID = 4; // TODO: CHANGE TO BEDROOM
-            return;
-        }
-        if (nearLivingroomDoor){
-            if (!Scene::getPuz2Status()){ // can only go after puzzle 2 complete
-                mGameState.dialogueActive = true;
-                mGameState.dialogueText = "Wait, no, this isn't the place";
-                return;
-            }
-            mGameState.nextSceneID = 4; // TODO: CHANGE TO LIVINGROOM
             return;
         }
     }

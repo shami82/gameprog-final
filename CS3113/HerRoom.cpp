@@ -148,9 +148,9 @@ void HerRoom::initialise()
 
     // ------------ POLAROIDS -------------
     mGameState.polaroids = new Entity(
-        { -900.0f, -900.0f }, // super off screen rn
-        { (float)texturePolaroids.width,
-        (float)texturePolaroids.height },
+        {-900.0f, -900.0f}, // super off screen rn
+        {static_cast<float>(texturePolaroids.width),
+         static_cast<float>(texturePolaroids.height)},
         texturePolaroids,
         NONE
     );

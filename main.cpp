@@ -1,10 +1,10 @@
-#include "CS3113/Mem1.h"
+#include "CS3113/LivingRoom.h"
 
 // Global Constants
 constexpr int SCREEN_WIDTH     = 990,
               SCREEN_HEIGHT    = 720,
               FPS              = 120,
-              NUMBER_OF_LEVELS = 9; // 5 rooms,1 start,1 instr,1 intro,2 end,3 memories,3 clues
+              NUMBER_OF_LEVELS = 10; // 5 rooms,1 start,1 instr,1 intro,2 end,3 memories,3 clues
 
 constexpr Vector2 ORIGIN       = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
@@ -27,7 +27,9 @@ HerRoom *gHerRoom = nullptr;
 Clue1 *gClue1 = nullptr;
 BadEnd *gBadEnd = nullptr;
 Mem1 *gMem1 = nullptr;
-// LivingRoom *gLivingRoom = nullptr;
+LivingRoom *gLivingRoom = nullptr;
+// Clue2 *gClue2 = nullptr;
+// Mem2 *gMem2 = nullptr;
 // BedRoom *gBedRoom = nullptr;
 
 
@@ -59,7 +61,9 @@ void initialise()
     gClue1 = new Clue1(ORIGIN, "#2D2A2A");
     gBadEnd = new BadEnd(ORIGIN, "#2D2A2A");
     gMem1 = new Mem1(ORIGIN, "#2D2A2A");
-    // gLivingRoom = new LivingRoom(ORIGIN, "#2D2A2A");
+    gLivingRoom = new LivingRoom(ORIGIN, "#2D2A2A");
+    // gClue2 = new Clue2(ORIGIN, "#2D2A2A");
+    // gMem2 = new Mem2(ORIGIN, "#2D2A2A");
     // gBedRoom = new BedRoom(ORIGIN, "#2D2A2A");
 
     gLevels.push_back(gStart);
@@ -71,7 +75,9 @@ void initialise()
     gLevels.push_back(gClue1);
     gLevels.push_back(gBadEnd);
     gLevels.push_back(gMem1);
-    // gLevels.push_back(gLivingRoom);
+    gLevels.push_back(gLivingRoom);
+    // gLevels.push_back(gClue2);
+    // gLevels.push_back(gMem2);
     // gLevels.push_back(gBedRoom);
 
     switchToScene(gLevels[0]);
@@ -156,7 +162,9 @@ void shutdown()
     delete gClue1;
     delete gBadEnd;
     delete gMem1;
-    // delete gLivingRoom;
+    delete gLivingRoom;
+    // delete gClue2;
+    // delete gMem2;
     // delete gBedRoom;
 
     for (int i = 0; i < NUMBER_OF_LEVELS; i++) gLevels[i] = nullptr;

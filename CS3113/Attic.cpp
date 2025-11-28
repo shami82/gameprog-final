@@ -201,8 +201,16 @@ void Attic::update(float deltaTime)
 
         if (nearChest && !Scene::getPuz1Status() && mGameState.dialogueStep == 0){ // regular dialogue
             mGameState.dialogueStep = 1;
-            mGameState.dialogueText = "I need to remmeber the combination...";
+            mGameState.dialogueText = "I need to remember the combination...";
             return;
+        }
+
+        if (nearWardrobe && Scene::getPuz1Status() && !Scene::getPuz2Status()){ // wardrobe for combination
+            if (mGameState.dialogueStep == 1){
+                mGameState.dialogueStep = 2;
+                mGameState.dialogueText = "I need to find the combination";
+                return;
+            }
         }
 
         mGameState.dialogueActive = false;
@@ -234,10 +242,35 @@ void Attic::update(float deltaTime)
                 return;
             }
         } 
-        if (nearWardrobe && !Scene::getPuz1Status()){
-            mGameState.dialogueActive = true;
-            mGameState.dialogueText = "No... not yet";
-            return;
+        if (nearWardrobe){
+            if (!Scene::getPuz1Status()){ // puz1 not done, cant do puz2
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "No... not yet";
+                return;
+            }
+
+            if (Scene::getPuz1Status() && !Scene::getPuz2Status()){ // puz1 done, start puz2
+                mGameState.dialogueActive = true;
+
+                if (mGameState.dialogueStep == 0){ // first its locked
+                    mGameState.dialogueText = "It's locked";
+                    mGameState.dialogueStep = 1;
+                    return;
+                }
+
+                else if (mGameState.dialogueStep == 1 && IsKeyPressed(KEY_E)){ // now need combo
+                    mGameState.dialogueText = "I need to find the combination";
+                    mGameState.dialogueStep = 2;
+                    return;
+                }
+            }
+
+            // TODO: UPDATE THIS PUZ2 STATUS TO BE WHEN THE PICTURE IS FOUND
+            // if (Scene::getPuz2Status()){
+            //     mGameState.dialogueActive = true;
+            //     mGameState.dialogueText = "It's empty now.";
+            //     return;
+            // }
         }
         if (nearAlbum && !Scene::getPuz2Status()){
             mGameState.dialogueActive = true;
@@ -247,7 +280,6 @@ void Attic::update(float deltaTime)
     }
 
     // TODO: Add interaction stuff with atticdoor, chest, wardrobe, and album
-    // TODO: Fix dialogue system so no double clicks
 }
 
 void Attic::render()
@@ -329,9 +361,15 @@ void Attic::shutdown()
     delete mGameState.bg;
     delete mGameState.player;
     delete mGameState.atticdoor;
-    delete mGameState.chest;
-    delete mGameState.wardrobe;
-    delete mGameState.album;
+    // delete mGameState.chest;
+    // delete mGameState.wardrobe;
+    // delete mGameState.album;
+    UnloadTexture(textureChest);
+    UnloadTexture(textureChestSolved);
+    UnloadTexture(textureWardrobe);
+    UnloadTexture(textureWardrobeSolved);
+    UnloadTexture(textureAlbum);
+    UnloadTexture(textureAlbumSolved);
     // TODO: double check unloading both closed and open puzzle textures
     UnloadTexture(textureDialogueBox);
     // UnloadMusicStream(mGameState.bgm);

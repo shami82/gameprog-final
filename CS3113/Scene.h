@@ -80,7 +80,10 @@ protected: // similar to private but children and friend classes can use them
     static bool polaroid2Found;
     static bool polaroid3Found;
     static bool polaroid4Found;
-    
+    // for the second puzzle
+    static bool picFound;
+    static bool picPlaced;
+
 public:
     Scene();
     Scene(Vector2 origin, const char *bgHexCode);
@@ -107,6 +110,12 @@ public:
     static bool getPol4Status()                 { return polaroid4Found; }
     static void setPol4Status(bool status)      { polaroid4Found = status; }
     
+    // for puzzle 2
+    static bool getPicFound()                   { return picFound; }
+    static void setPicFoundStatus(bool status)  { picFound = status; }
+    static bool getPicPlaced()                  { return picPlaced; }
+    static void setPicPlacedStatus(bool status) { picPlaced = status; }
+
     GameState   getState()           const { return mGameState; }
     Vector2     getOrigin()          const { return mOrigin;    }
     const char* getBGColourHexCode() const { return mBGColourHexCode; }
