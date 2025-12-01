@@ -60,6 +60,7 @@ void Clue1::initialise()
 
 void Clue1::update(float deltaTime)
 {
+    pulseTimer += deltaTime * pulseSpeed;
     if (stage == STAGE_SHOW_BLUR && mGameState.dialogueActive){ // start dialogue
         if (IsKeyPressed(KEY_E)){ // close dialogue and start minigame
             mGameState.dialogueActive = false;
@@ -128,7 +129,39 @@ void Clue1::render()
 {
     ClearBackground(BLACK);
 
-    mGameState.cutscene->render();
+    // mGameState.cutscene->render();
+    if (stage == STAGE_SHOW_BLUR || stage == STAGE_MINIGAME){
+        float pulse = (sinf(pulseTimer) + 1.0f) * 0.5f; // 0..1
+        float scaleMul = 1.0f + pulse * pulseAmount;
+
+        Rectangle src = {
+            0, 0,
+            (float)mGameState.cutscene->getTexture().width,
+            (float)mGameState.cutscene->getTexture().height
+        };
+
+        Rectangle dest = {
+            mOrigin.x,
+            mOrigin.y,
+            990.0f * scaleMul,
+            720.0f * scaleMul
+        };
+
+        Vector2 origin = { dest.width / 2.0f, dest.height / 2.0f };
+
+        DrawTexturePro(
+            mGameState.cutscene->getTexture(),
+            src,
+            dest,
+            origin,
+            0,
+            WHITE
+        );
+    }
+    else{
+        // no shaking when clear
+        mGameState.cutscene->render();
+    }
     mGameState.bg->render(); // stays on top
 
     if (stage == STAGE_MINIGAME){ // rendering the minigame

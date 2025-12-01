@@ -24,6 +24,10 @@ private:
     bool tappedOnce = false;
     bool showExitPrompt = false;
 
+    float pulseTimer = 0.0f;
+    float pulseSpeed = 10.0f;
+    float pulseAmount = 0.06f;
+
 public:
 
     Clue1();

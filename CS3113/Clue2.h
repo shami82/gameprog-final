@@ -18,10 +18,13 @@ private:
     float fillTarget = 400.0f; // target fill amount
     float fillPerTap = 12.0f; // for every key press
     float drainPerSecond = 7.0f; // drain rate
-    // int maxTapsForAutoWin = 30; // MIGHT REMOVE depends on difficulty
 
     bool tappedOnce = false;
     bool showExitPrompt = false;
+
+    float pulseTimer = 0.0f;
+    float pulseSpeed = 10.0f;
+    float pulseAmount = 0.06f;
 
 public:
 

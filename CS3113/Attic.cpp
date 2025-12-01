@@ -342,18 +342,18 @@ void Attic::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    mGameState.bg->displayCollider();
+    // mGameState.bg->displayCollider();
     mGameState.wardrobe->render();
-    mGameState.wardrobe->displayCollider();
+    // mGameState.wardrobe->displayCollider();
     mGameState.chest->render();
-    mGameState.chest->displayCollider();
+    // mGameState.chest->displayCollider();
     mGameState.album->render();
-    mGameState.album->displayCollider();
+    // mGameState.album->displayCollider();
     mGameState.atticdoor->render();
-    mGameState.atticdoor->displayCollider();
+    // mGameState.atticdoor->displayCollider();
 
     mGameState.player->render();
-    mGameState.player->displayCollider();
+    // mGameState.player->displayCollider();
 
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();
