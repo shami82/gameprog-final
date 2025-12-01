@@ -57,13 +57,16 @@ void Entity::checkCollisionY(Entity *collidableEntities, int collisionCheckCount
         Entity* other = &collidableEntities[i];
         if (!isColliding(other)) continue;
 
-        float yDist = mPosition.y - other->mPosition.y;
+        Vector2 thisCenter = { mPosition.x + mColliderOffset.x, mPosition.y + mColliderOffset.y };
+        Vector2 otherCenter = { other->mPosition.x + other->mColliderOffset.x, other->mPosition.y + other->mColliderOffset.y };
+
+        float yDist = thisCenter.y - otherCenter.y;
         float overlap = ((mColliderDimensions.y + other->mColliderDimensions.y) * 0.5f) - fabs(yDist);
 
         if (yDist > 0){
             mPosition.y += overlap;
             mIsCollidingTop = true;
-        } 
+        }
         else{
             mPosition.y -= overlap;
             mIsCollidingBottom = true;
@@ -77,13 +80,16 @@ void Entity::checkCollisionX(Entity *collidableEntities, int collisionCheckCount
         Entity* other = &collidableEntities[i];
         if (!isColliding(other)) continue;
 
-        float xDist = mPosition.x - other->mPosition.x;
+        Vector2 thisCenter = { mPosition.x + mColliderOffset.x, mPosition.y + mColliderOffset.y };
+        Vector2 otherCenter = { other->mPosition.x + other->mColliderOffset.x, other->mPosition.y + other->mColliderOffset.y };
+
+        float xDist = thisCenter.x - otherCenter.x;
         float overlap = ((mColliderDimensions.x + other->mColliderDimensions.x) * 0.5f) - fabs(xDist);
 
         if (xDist > 0){
             mPosition.x += overlap;
             mIsCollidingLeft = true;
-        } 
+        }
         else{
             mPosition.x -= overlap;
             mIsCollidingRight = true;
@@ -110,13 +116,60 @@ bool Entity::isColliding(Entity* other) const
     if (!other || !other->isActive() || other == this)
         return false;
 
-    float xDistance = fabs(mPosition.x - other->mPosition.x) -
-               ((mColliderDimensions.x + other->mColliderDimensions.x) * 0.5f);
+    Vector2 thisCenter = {
+        mPosition.x + mColliderOffset.x,
+        mPosition.y + mColliderOffset.y
+    };
 
-    float yDistance = fabs(mPosition.y - other->mPosition.y) -
-               ((mColliderDimensions.y + other->mColliderDimensions.y) * 0.5f);
+    Vector2 otherCenter = {
+        other->mPosition.x + other->mColliderOffset.x,
+        other->mPosition.y + other->mColliderOffset.y
+    };
+
+    float xDistance = fabs(thisCenter.x - otherCenter.x) -
+        ((mColliderDimensions.x + other->mColliderDimensions.x) * 0.5f);
+
+    float yDistance = fabs(thisCenter.y - otherCenter.y) -
+        ((mColliderDimensions.y + other->mColliderDimensions.y) * 0.5f);
 
     return (xDistance < 0 && yDistance < 0);
+}
+
+void Entity::clampInside(Entity* boundary)
+{
+    if (!boundary) return;
+
+    // bg collider center
+    Vector2 bgCenter = {
+        boundary->getPosition().x + boundary->getColliderOffset().x,
+        boundary->getPosition().y + boundary->getColliderOffset().y
+    };
+
+    float bgHalfW = boundary->getColliderDimensions().x * 0.5f;
+    float bgHalfH = boundary->getColliderDimensions().y * 0.5f;
+
+    // player collider center
+    Vector2 pCenter = {
+        mPosition.x + mColliderOffset.x,
+        mPosition.y + mColliderOffset.y
+    };
+
+    float pHalfW = mColliderDimensions.x * 0.5f;
+    float pHalfH = mColliderDimensions.y * 0.5f;
+
+    // clamp x
+    if (pCenter.x - pHalfW < bgCenter.x - bgHalfW)
+        mPosition.x = (bgCenter.x - bgHalfW) + pHalfW - mColliderOffset.x;
+
+    if (pCenter.x + pHalfW > bgCenter.x + bgHalfW)
+        mPosition.x = (bgCenter.x + bgHalfW) - pHalfW - mColliderOffset.x;
+
+    // clamp y
+    if (pCenter.y - pHalfH < bgCenter.y - bgHalfH)
+        mPosition.y = (bgCenter.y - bgHalfH) + pHalfH - mColliderOffset.y;
+
+    if (pCenter.y + pHalfH > bgCenter.y + bgHalfH)
+        mPosition.y = (bgCenter.y + bgHalfH) - pHalfH - mColliderOffset.y;
 }
 
 void Entity::animate(float deltaTime)
@@ -167,7 +220,8 @@ void Entity::update(float deltaTime, Entity* player,
         if (!other || !other->isActive() || other == this) continue;
 
         if (isColliding(other)){
-            float d = mPosition.x - other->mPosition.x;
+            float d = (mPosition.x + mColliderOffset.x) -
+                      (other->mPosition.x + other->mColliderOffset.x);
             float totalHalfWidth =
                 (mColliderDimensions.x + other->mColliderDimensions.x) * 0.5f;
 
@@ -194,7 +248,8 @@ void Entity::update(float deltaTime, Entity* player,
         if (!other || !other->isActive() || other == this) continue;
 
         if (isColliding(other)){
-            float d = mPosition.y - other->mPosition.y;
+            float d = (mPosition.y + mColliderOffset.y) -
+                      (other->mPosition.y + other->mColliderOffset.y);
             float totalHalfHeight =
                 (mColliderDimensions.y + other->mColliderDimensions.y) * 0.5f;
 
@@ -211,6 +266,74 @@ void Entity::update(float deltaTime, Entity* player,
                 mIsCollidingBottom = (d < 0);
             }
         }
+    }
+}
+
+void Entity::update(float deltaTime, Entity* player,
+                    const std::vector<Entity*>& collidables, int count,
+                    Entity* boundaryBg)
+{
+    resetColliderFlags();
+
+    static constexpr float SOFT_OVERLAP = 10.0f; // so it can intersect just a smidge
+
+    float deltaX = mMovement.x * mSpeed * deltaTime;
+    mPosition.x += deltaX;
+
+    for (int i = 0; i < count; i++){
+        Entity* other = collidables[i];
+        if (!other || !other->isActive() || other == this) continue;
+
+        if (isColliding(other)){
+            float d = (mPosition.x + mColliderOffset.x) -
+                      (other->mPosition.x + other->mColliderOffset.x);
+            float totalHalfWidth =
+                (mColliderDimensions.x + other->mColliderDimensions.x) * 0.5f;
+
+            float overlap = totalHalfWidth - fabsf(d);
+
+            if (overlap > SOFT_OVERLAP){
+                bool movingToward = (deltaX > 0 && d < 0) || (deltaX < 0 && d > 0);
+
+                if (movingToward){
+                    mPosition.x -= deltaX;
+                }
+
+                mIsCollidingLeft  = (d > 0);
+                mIsCollidingRight = (d < 0);
+            }
+        }
+    }
+
+    float deltaY = mMovement.y * mSpeed * deltaTime;
+    mPosition.y += deltaY;
+
+    for (int i = 0; i < count; i++){
+        Entity* other = collidables[i];
+        if (!other || !other->isActive() || other == this) continue;
+
+        if (isColliding(other)){
+            float d = (mPosition.y + mColliderOffset.y) -
+                      (other->mPosition.y + other->mColliderOffset.y);
+            float totalHalfHeight =
+                (mColliderDimensions.y + other->mColliderDimensions.y) * 0.5f;
+
+            float overlap = totalHalfHeight - fabsf(d);
+
+            if (overlap > SOFT_OVERLAP){
+                bool movingToward = (deltaY > 0 && d < 0) || (deltaY < 0 && d > 0);
+
+                if (movingToward){
+                    mPosition.y -= deltaY;
+                }
+
+                mIsCollidingTop    = (d > 0);
+                mIsCollidingBottom = (d < 0);
+            }
+        }
+    }
+    if (player == this && boundaryBg != nullptr){
+        clampInside(boundaryBg);
     }
 }
 
@@ -270,12 +393,17 @@ void Entity::render()
 
 void Entity::displayCollider() 
 {
+    Vector2 center = {
+        mPosition.x + mColliderOffset.x,
+        mPosition.y + mColliderOffset.y
+    };
+
     // draw the collision box
     Rectangle colliderBox = {
-        mPosition.x - mColliderDimensions.x / 2.0f,  
-        mPosition.y - mColliderDimensions.y / 2.0f,  
-        mColliderDimensions.x,                        
-        mColliderDimensions.y                        
+        center.x - mColliderDimensions.x / 2.0f,
+        center.y - mColliderDimensions.y / 2.0f,
+        mColliderDimensions.x,
+        mColliderDimensions.y
     };
 
     DrawRectangleLines(

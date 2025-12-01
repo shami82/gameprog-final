@@ -29,6 +29,14 @@ void HerRoom::initialise()
         textureBG,                                      // texture file address
         NONE                                            // type
     );
+    mGameState.bg->setColliderDimensions({ 
+        630.0f ,
+        405.0f
+    });
+    mGameState.bg->setColliderOffset({
+        0.0f,
+        62.5f
+    });
 
     // ------------ PLAYER -------------
     std::map<Direction, std::vector<int>> playerAnimationAtlas = {
@@ -40,7 +48,8 @@ void HerRoom::initialise()
 
     mGameState.player = new Entity(
         {600.0f, 535.0f},            // starting position
-        {100.0f, 155.0f},        // player scale
+        {static_cast<float>(texturePlayer.width)/4.0f,
+         static_cast<float>(texturePlayer.height)/4.0f},
         texturePlayer,
         ATLAS,
         { 4, 4 },                // sprite sheet dimensions
@@ -49,8 +58,12 @@ void HerRoom::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x - 20.0f , // TODO: make little smaller?
-        mGameState.player->getScale().y - 60.0f  // TODO: make little smaller?
+        mGameState.player->getScale().x * 0.5f , // TODO: make little smaller?
+        mGameState.player->getScale().y * 0.4f  // TODO: make little smaller?
+    });
+    mGameState.player->setColliderOffset({
+        0.0f,
+        mGameState.player->getScale().y * 0.25f // bottom half of the sprite
     });
     mGameState.player->setSpeed(150);
     mGameState.player->setDirection(UP); // facing the things in the room
@@ -160,6 +173,15 @@ void HerRoom::initialise()
         mGameState.polaroids->getScale().y + 10.0f
     });
 
+    collidables.clear();
+    collidables.push_back(mGameState.herhallwaydoor);
+    collidables.push_back(mGameState.beanbag);
+    collidables.push_back(mGameState.hershelf);
+    collidables.push_back(mGameState.hertable);
+    collidables.push_back(mGameState.herchair);
+    collidables.push_back(mGameState.bookshelf);
+    collidables.push_back(mGameState.herbed);
+
     // ------------ DIALOGUE -------------
     Vector2 dialoguePos = { mOrigin.x , 720.0f - 20.0f - 100.0f }; 
 
@@ -201,7 +223,11 @@ void HerRoom::update(float deltaTime)
         }
     }
 
-    mGameState.player->update(deltaTime, nullptr, nullptr, 0);
+    mGameState.player->update(deltaTime,
+                          mGameState.player,
+                          collidables,
+                          (int)collidables.size(),
+                          mGameState.bg);
     if (IsKeyDown(KEY_A)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_D)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_W)) mGameState.player->animate(deltaTime);
@@ -299,7 +325,7 @@ void HerRoom::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    // mGameState.bg->displayCollider();
+    mGameState.bg->displayCollider();
     mGameState.herbed->render();
     mGameState.herbed->displayCollider();
     mGameState.hershelf->render();

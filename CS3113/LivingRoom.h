@@ -6,6 +6,7 @@
 class LivingRoom : public Scene {
 private:
     Texture2D textureBG;
+    Texture2D textureBG2;
     Texture2D texturePlayer;
     Texture2D textureDialogueBox;
     Texture2D textureCouch1;
@@ -16,6 +17,8 @@ private:
     Texture2D textureLivingStool;
     Texture2D textureLivingTable;
     Texture2D textureLivingTV;
+
+    std::vector<Entity*> collidables;
 
     bool firstTimeDialoguePlayed = false;
     float dialogueDelayTimer = 0.0f;

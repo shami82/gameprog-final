@@ -1,0 +1,38 @@
+#include "LivingRoom.h"
+
+#ifndef CLUE2_H
+#define CLUE2_H
+
+class Clue2 : public Scene {
+private:
+    Texture2D textureBG;
+    Texture2D textureClue2Blur;
+    Texture2D textureClue2Clear;
+    Texture2D textureDialogueBox;
+
+    bool minigameActive = false; // will be tru afterthe dialogue
+    float minigameTimer = 0.0f; // checking how long has passed
+    float fillAmount = 0.0f; // amount filled
+
+    float minigameDuration = 20.0f; // seconds to attempt
+    float fillTarget = 400.0f; // target fill amount
+    float fillPerTap = 12.0f; // for every key press
+    float drainPerSecond = 7.0f; // drain rate
+    // int maxTapsForAutoWin = 30; // MIGHT REMOVE depends on difficulty
+
+    bool tappedOnce = false;
+    bool showExitPrompt = false;
+
+public:
+
+    Clue2();
+    Clue2(Vector2 origin, const char *bgHexCode);
+    ~Clue2();
+    
+    void initialise() override;
+    void update(float deltaTime) override;
+    void render() override;
+    void shutdown() override;
+};
+
+#endif

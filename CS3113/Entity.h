@@ -83,6 +83,11 @@ public:
         Entity *collidableEntities, int collisionCheckCount);
     void update(float deltaTime, Entity* player, 
             const std::vector<Entity*>& collidables, int collisionCheckCount);
+    void update(float deltaTime, Entity* player,
+                    const std::vector<Entity*>& collidables, int count,
+                    Entity* boundaryBg);
+    
+    void clampInside(Entity* boundary);
         
     void render();
     void normaliseMovement() { Normalise(&mMovement); }
@@ -132,6 +137,10 @@ public:
         { mTexture = newTexture; }
     void setColliderDimensions(Vector2 newDimensions) 
         { mColliderDimensions = newDimensions;     }
+    void setColliderOffset(Vector2 offset) 
+        { mColliderOffset = offset;                }
+    Vector2 getColliderOffset() const 
+        { return mColliderOffset;                  }
     void setSpriteSheetDimensions(Vector2 newDimensions) 
         { mSpriteSheetDimensions = newDimensions;  }
     void setSpeed(int newSpeed)

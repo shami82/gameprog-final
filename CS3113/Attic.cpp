@@ -28,6 +28,14 @@ void Attic::initialise()
         textureBG,                                      // texture file address
         NONE                                            // type
     );
+    mGameState.bg->setColliderDimensions({ 
+        600.0f ,
+        440.0f
+    });
+    mGameState.bg->setColliderOffset({
+        0.0f,
+        80.0f
+    });
 
     // ------------ PLAYER -------------
     std::map<Direction, std::vector<int>> playerAnimationAtlas = {
@@ -50,7 +58,11 @@ void Attic::initialise()
 
     mGameState.player->setColliderDimensions({ 
         mGameState.player->getScale().x * 0.9f , // TODO: make little smaller?
-        mGameState.player->getScale().y * 0.9f  // TODO: make little smaller?
+        mGameState.player->getScale().y * 0.5f  // TODO: make little smaller?
+    });
+    mGameState.player->setColliderOffset({
+        0.0f,
+        mGameState.player->getScale().y * 0.25f // bottom half of the sprite
     });
     mGameState.player->setSpeed(150);
     mGameState.player->setDirection(UP); // facing the things in the room
@@ -145,7 +157,8 @@ void Attic::update(float deltaTime)
     mGameState.player->update(deltaTime,
                           mGameState.player,
                           collidables,
-                          (int)collidables.size());
+                          (int)collidables.size(),
+                          mGameState.bg);
     if (IsKeyDown(KEY_A)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_D)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_W)) mGameState.player->animate(deltaTime);
@@ -191,6 +204,39 @@ void Attic::update(float deltaTime)
         return;
     }
 
+    // PUZZLE 2 LOGIC FOR THE COMBO
+    if (enteringCode2){
+        int key = GetCharPressed();
+        while (key > 0){
+            if (key >= '0' && key <= '9'){
+                if (currentCode2.size() < 4) currentCode2.push_back((char)key);
+            }
+            key = GetCharPressed();
+        }
+
+        if (currentCode2.size() == 4){
+            if (currentCode2 == correctCode2){
+                Scene::setPuz2Status(true);
+                mGameState.wardrobe->setTexture(textureWardrobeSolved);
+
+                enteringCode2 = false;
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "it opened...";
+                currentCode2.clear();
+                return;
+            }
+            else{
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "no, that's not it";
+                enteringCode2 = false;
+                currentCode2.clear();
+                return;
+            }
+        }
+
+        return;
+    }
+
     if (mGameState.dialogueActive && IsKeyPressed(KEY_E)){ // special case for if it opened
         if (nearChest && mGameState.dialogueText == "it opened..."){
             mGameState.dialogueActive = false;
@@ -211,6 +257,13 @@ void Attic::update(float deltaTime)
                 mGameState.dialogueText = "I need to find the combination";
                 return;
             }
+        }
+
+        if (nearWardrobe && mGameState.dialogueText == "it opened..."){
+            mGameState.dialogueActive = false;
+            mGameState.dialogueStep = 0;
+            mGameState.nextSceneID = 3; // TODO: CHANGE TO MEM2 SCENE
+            return;
         }
 
         mGameState.dialogueActive = false;
@@ -249,7 +302,15 @@ void Attic::update(float deltaTime)
                 return;
             }
 
-            if (Scene::getPuz1Status() && !Scene::getPuz2Status()){ // puz1 done, start puz2
+            if (Scene::getPicPlaced() && !Scene::getPuz2Status()){ // enter the combo for the wardrobe
+                enteringCode2 = true;
+                currentCode2.clear();
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "Enter the 4-digit combination:";
+                return;
+            }
+
+            else if (Scene::getPuz1Status() && !Scene::getPuz2Status()){ // puz1 done, start puz2
                 mGameState.dialogueActive = true;
 
                 if (mGameState.dialogueStep == 0){ // first its locked
@@ -264,13 +325,6 @@ void Attic::update(float deltaTime)
                     return;
                 }
             }
-
-            // TODO: UPDATE THIS PUZ2 STATUS TO BE WHEN THE PICTURE IS FOUND
-            // if (Scene::getPuz2Status()){
-            //     mGameState.dialogueActive = true;
-            //     mGameState.dialogueText = "It's empty now.";
-            //     return;
-            // }
         }
         if (nearAlbum && !Scene::getPuz2Status()){
             mGameState.dialogueActive = true;
@@ -326,7 +380,20 @@ void Attic::render()
                 32,
                 WHITE
             );
+        }
 
+        if (enteringCode2){ // for the 2nd combo login
+            std::string display2 = currentCode2;
+            while (display2.size() < 4)
+                display2.push_back('_'); // show the missing spots
+
+            DrawText(
+                display2.c_str(),
+                textX,
+                textY + 40,
+                32,
+                WHITE
+            );
         }
     }
 
@@ -336,8 +403,9 @@ void Attic::render()
     bool nearAtticDoor = mGameState.player->isColliding(mGameState.atticdoor);
 
     // showing that you can interact with the corner text
+    // TODO: FIX THIS SO IT DOESNT SHOW WHEN CHEST COMPLETE
     bool canInteract = (
-        nearChest || nearWardrobe || nearAlbum || nearAtticDoor || 
+        (nearChest && !getPuz1Status()) || (nearWardrobe && !getPuz2Status()) || nearAlbum || nearAtticDoor || 
         mGameState.dialogueActive
     );
 

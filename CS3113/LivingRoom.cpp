@@ -7,6 +7,7 @@ LivingRoom::~LivingRoom() { shutdown(); }
 void LivingRoom::initialise()
 {
     textureBG = LoadTexture("assets/livingroom/livingroom.PNG");
+    textureBG2 = LoadTexture("assets/livingroom/livingroom2.PNG");
     texturePlayer = LoadTexture("assets/player.PNG");
     textureDialogueBox = LoadTexture("assets/dialoguebox.PNG");
     textureCouch1 = LoadTexture("assets/livingroom/couch1.PNG");
@@ -29,6 +30,18 @@ void LivingRoom::initialise()
         textureBG,                                      // texture file address
         NONE                                            // type
     );
+    mGameState.bg->setColliderDimensions({ 
+        645.0f ,
+        550.0f
+    });
+    mGameState.bg->setColliderOffset({
+        40.0f,
+        0.0f
+    });
+
+    if (picPlaced){
+        mGameState.bg->setTexture(textureBG2);
+    }
 
     // ------------ PLAYER -------------
     std::map<Direction, std::vector<int>> playerAnimationAtlas = {
@@ -40,7 +53,8 @@ void LivingRoom::initialise()
 
     mGameState.player = new Entity(
         {700.0f, 155.0f},            // starting position
-        {100.0f * 0.8f, 155.0f * 0.8f},        // SMALLER SPRITE TO SHOW BIGGER ROOM
+        {static_cast<float>(texturePlayer.width)/5.0f,
+         static_cast<float>(texturePlayer.height)/5.0f},
         texturePlayer,
         ATLAS,
         { 4, 4 },                // sprite sheet dimensions
@@ -49,10 +63,14 @@ void LivingRoom::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x - 20.0f , // TODO: make little smaller?
-        mGameState.player->getScale().y - 60.0f  // TODO: make little smaller?
+        mGameState.player->getScale().x * 0.7f , // TODO: make little smaller?
+        mGameState.player->getScale().y * 0.5f  // TODO: make little smaller?
     });
-    mGameState.player->setSpeed(150);
+    mGameState.player->setColliderOffset({
+        0.0f,
+        mGameState.player->getScale().y * 0.25f // bottom half of the sprite
+    });
+    mGameState.player->setSpeed(130);
     mGameState.player->setDirection(LEFT); // facing the things in the room
 
     // ------------ COUCH1 -------------
@@ -159,6 +177,16 @@ void LivingRoom::initialise()
         mGameState.livingstairs->getScale().y + 10.0f
     });
 
+    collidables.clear();
+    collidables.push_back(mGameState.livingbookshelf);
+    collidables.push_back(mGameState.couch1);
+    collidables.push_back(mGameState.couch2);
+    collidables.push_back(mGameState.livingstairs);
+    collidables.push_back(mGameState.livingshelf);
+    collidables.push_back(mGameState.livingtv);
+    collidables.push_back(mGameState.livingstool);
+    collidables.push_back(mGameState.livingtable);
+
     // ------------ DIALOGUE -------------
     Vector2 dialoguePos = { mOrigin.x , 720.0f - 20.0f - 100.0f }; 
 
@@ -200,7 +228,11 @@ void LivingRoom::update(float deltaTime)
         }
     }
 
-    mGameState.player->update(deltaTime, nullptr, nullptr, 0);
+    mGameState.player->update(deltaTime,
+                          mGameState.player,
+                          collidables,
+                          (int)collidables.size(),
+                          mGameState.bg);
     if (IsKeyDown(KEY_A)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_D)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_W)) mGameState.player->animate(deltaTime);
@@ -259,7 +291,8 @@ void LivingRoom::update(float deltaTime)
         if (nearStool){
             if (picFound && !picPlaced){ // if pic found then place the pic
                 Scene::setPicPlacedStatus(true);
-                mGameState.nextSceneID = 4; // TODO: CHANGE TO CLUE SCENE
+                mGameState.bg->setTexture(textureBG2);
+                mGameState.nextSceneID = 10; // go to clue2
                 return;
             }
             if (!stoolActivated){
@@ -289,7 +322,7 @@ void LivingRoom::update(float deltaTime)
                 return;
             }
 
-            if (nearCouch2){ // 2 for couch2
+            if (nearTable){ // 2 for table
                 if (hidingSpot == 2){
                     Scene::setPicFoundStatus(true);
                     mGameState.dialogueActive = true;
@@ -328,7 +361,7 @@ void LivingRoom::update(float deltaTime)
                 return;
             }
 
-            if (nearTable){ //5 for table
+            if (nearCouch2){ //5 for couch2
                 if (hidingSpot == 5){
                     Scene::setPicFoundStatus(true);
                     mGameState.dialogueActive = true;
@@ -366,7 +399,7 @@ void LivingRoom::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    // mGameState.bg->displayCollider();
+    mGameState.bg->displayCollider();
     mGameState.couch1->render();
     mGameState.couch1->displayCollider();
     mGameState.couch2->render();

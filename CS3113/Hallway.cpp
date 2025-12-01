@@ -25,6 +25,14 @@ void Hallway::initialise()
         textureBG,                                      // texture file address
         NONE                                            // type
     );
+    mGameState.bg->setColliderDimensions({ 
+        990.0f ,
+        240.0f
+    });
+    mGameState.bg->setColliderOffset({
+        0.0f,
+        80.0f
+    });
 
     // ------------ PLAYER -------------
     std::map<Direction, std::vector<int>> playerAnimationAtlas = {
@@ -36,7 +44,8 @@ void Hallway::initialise()
 
     mGameState.player = new Entity(
         {mOrigin.x, mOrigin.y + 50.0f},            // starting position
-        {100.0f, 155.0f},        // player scale
+        {static_cast<float>(texturePlayer.width)/4.0f,
+         static_cast<float>(texturePlayer.height)/4.0f},
         texturePlayer,
         ATLAS,
         { 4, 4 },                // sprite sheet dimensions
@@ -45,8 +54,12 @@ void Hallway::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x - 20.0f , // TODO: make little smaller?
-        mGameState.player->getScale().y - 60.0f  // TODO: make little smaller?
+        mGameState.player->getScale().x * 0.9f , // TODO: make little smaller?
+        mGameState.player->getScale().y * 0.5f  // TODO: make little smaller?
+    });
+    mGameState.player->setColliderOffset({
+        0.0f,
+        mGameState.player->getScale().y * 0.25f // bottom half of the sprite
     });
     mGameState.player->setSpeed(150);
     mGameState.player->setDirection(RIGHT); // facing the things in the room
@@ -103,6 +116,12 @@ void Hallway::initialise()
         mGameState.livingroomdoor->getScale().y + 10.0f
     });
 
+    collidables.clear();
+    collidables.push_back(mGameState.herdoor);
+    collidables.push_back(mGameState.livingroomdoor);
+    collidables.push_back(mGameState.bedroomdoor);
+    collidables.push_back(mGameState.atticstairs);
+
     // ------------ DIALOGUE -------------
     Vector2 dialoguePos = { mOrigin.x , 720.0f - 20.0f - 100.0f }; 
 
@@ -118,7 +137,11 @@ void Hallway::initialise()
 void Hallway::update(float deltaTime)
 {
     // UpdateMusicStream(mGameState.bgm);
-    mGameState.player->update(deltaTime, nullptr, nullptr, 0);
+   mGameState.player->update(deltaTime,
+                          mGameState.player,
+                          collidables,
+                          (int)collidables.size(),
+                          mGameState.bg);
     if (IsKeyDown(KEY_A)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_D)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_W)) mGameState.player->animate(deltaTime);

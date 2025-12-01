@@ -21,6 +21,10 @@ private:
     bool enteringCode = false;
     std::string currentCode = "";
     const std::string correctCode = "0812"; // first puzzle answer
+
+    bool enteringCode2 = false;
+    std::string currentCode2 = "";
+    const std::string correctCode2 = "0627"; // second puzzle answer
     
 
 public:

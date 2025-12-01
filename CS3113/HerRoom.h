@@ -17,6 +17,8 @@ private:
     Texture2D textureBeanbag;
     Texture2D texturePolaroids;
 
+    std::vector<Entity*> collidables;
+
     bool firstTimeDialoguePlayed = false;
     float dialogueDelayTimer = 0.0f;
     bool waitingForIntroDialogue = false;

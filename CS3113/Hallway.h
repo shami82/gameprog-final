@@ -13,6 +13,8 @@ private:
     Texture2D textureBedroomDoor;
     Texture2D textureLivingroomDoor;
 
+    std::vector<Entity*> collidables;
+
 public:
 
     Hallway();
