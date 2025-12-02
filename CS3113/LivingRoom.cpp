@@ -32,11 +32,11 @@ void LivingRoom::initialise()
     );
     mGameState.bg->setColliderDimensions({ 
         645.0f ,
-        550.0f
+        490.0f
     });
     mGameState.bg->setColliderOffset({
         40.0f,
-        0.0f
+        30.0f
     });
 
     if (picPlaced){

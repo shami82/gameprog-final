@@ -1,9 +1,9 @@
-#include "BadEnd.h"
+#include "Clue2.h"
 
-#ifndef MEM1_H
-#define MEM1_H
+#ifndef MEM2_H
+#define MEM2_H
 
-class Mem1 : public Scene {
+class Mem2 : public Scene {
 private:
     Texture2D textureBG;
     Texture2D textureMem1;
@@ -17,18 +17,19 @@ private:
     Texture2D textureMem9;
     Texture2D textureMem10;
     Texture2D textureMem11;
+    Texture2D textureMem12;
     Texture2D textureDialogueBox;
 
     float flashTimer;
-    bool flashing; // for the cool flash effect when showing 8-10
-    bool flash9Shown;
-    const float flashDuration = 0.5f; // time 9 stays on screen
+    bool flashing; // for the cool flash effect when showing 10-11
+    bool flash10Shown;
+    const float flashDuration = 0.5f; // time 10 stays on screen
 
 public:
 
-    Mem1();
-    Mem1(Vector2 origin, const char *bgHexCode);
-    ~Mem1();
+    Mem2();
+    Mem2(Vector2 origin, const char *bgHexCode);
+    ~Mem2();
     
     void initialise() override;
     void update(float deltaTime) override;

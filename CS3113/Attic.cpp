@@ -262,7 +262,14 @@ void Attic::update(float deltaTime)
         if (nearWardrobe && mGameState.dialogueText == "it opened..."){
             mGameState.dialogueActive = false;
             mGameState.dialogueStep = 0;
-            mGameState.nextSceneID = 3; // TODO: CHANGE TO MEM2 SCENE
+            mGameState.nextSceneID = 11; // go to mem2
+            return;
+        }
+
+        if (nearAlbum && mGameState.dialogueText == "it's open...") {
+            mGameState.dialogueActive = false;
+            mGameState.dialogueStep = 0;
+            mGameState.nextSceneID = 13; // go to final memory
             return;
         }
 
@@ -326,10 +333,34 @@ void Attic::update(float deltaTime)
                 }
             }
         }
-        if (nearAlbum && !Scene::getPuz2Status()){
-            mGameState.dialogueActive = true;
-            mGameState.dialogueText = "No... not yet";
-            return;
+        if (nearAlbum){
+            if (!Scene::getPuz2Status()){ // can't interact until puz2 done
+                mGameState.dialogueActive = true;
+                mGameState.dialogueText = "No... not yet";
+                return;
+            }
+            else if (Scene::getPuz2Status() && !Scene::getKeyFound()){
+                mGameState.dialogueActive = true;
+
+                if (mGameState.dialogueStep == 0){ // first its locked
+                    mGameState.dialogueText = "It's locked";
+                    mGameState.dialogueStep = 1;
+                    return;
+                }
+
+                else if (mGameState.dialogueStep == 1 && IsKeyPressed(KEY_E)){ // now need combo
+                    mGameState.dialogueText = "I need the key...";
+                    mGameState.dialogueStep = 2;
+                    return;
+                }
+            }
+            else{ // key was found
+                mGameState.album->setTexture(textureAlbumSolved);
+                mGameState.dialogueActive = true;
+                mGameState.dialogueStep = 0;
+                mGameState.dialogueText = "it's open...";
+                return;
+            }
         }
     }
 

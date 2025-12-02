@@ -59,6 +59,8 @@ void Clue2::initialise()
 
 void Clue2::update(float deltaTime)
 {
+    pulseTimer += deltaTime * pulseSpeed;
+
     if (stage == STAGE_SHOW_BLUR && mGameState.dialogueActive){ // start dialogue
         if (IsKeyPressed(KEY_E)){ // close dialogue and start minigame
             mGameState.dialogueActive = false;

@@ -56,6 +56,7 @@ struct GameState
     Entity *bedroomtable;
     Entity *bedroomwardrobe;
     Entity *bedroommirror;
+    Entity *hallwaydoor;
 
     Music bgm;
     Sound stairsSound;
@@ -83,6 +84,8 @@ protected: // similar to private but children and friend classes can use them
     // for the second puzzle
     static bool picFound;
     static bool picPlaced;
+    // for the third puzzle
+    static bool keyFound;
 
 public:
     Scene();
@@ -115,6 +118,10 @@ public:
     static void setPicFoundStatus(bool status)  { picFound = status; }
     static bool getPicPlaced()                  { return picPlaced; }
     static void setPicPlacedStatus(bool status) { picPlaced = status; }
+
+    // for puzzle 3
+    static bool getKeyFound()                   { return keyFound; }
+    static void setKeyFoundStatus(bool status)  { keyFound = status; }
 
     GameState   getState()           const { return mGameState; }
     Vector2     getOrigin()          const { return mOrigin;    }
