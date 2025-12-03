@@ -460,16 +460,12 @@ void Attic::shutdown()
     delete mGameState.bg;
     delete mGameState.player;
     delete mGameState.atticdoor;
-    // delete mGameState.chest;
-    // delete mGameState.wardrobe;
-    // delete mGameState.album;
     UnloadTexture(textureChest);
     UnloadTexture(textureChestSolved);
     UnloadTexture(textureWardrobe);
     UnloadTexture(textureWardrobeSolved);
     UnloadTexture(textureAlbum);
     UnloadTexture(textureAlbumSolved);
-    // TODO: double check unloading both closed and open puzzle textures
     UnloadTexture(textureDialogueBox);
     // UnloadMusicStream(mGameState.bgm);
 }
