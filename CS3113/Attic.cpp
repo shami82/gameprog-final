@@ -367,7 +367,7 @@ void Attic::update(float deltaTime)
     // TODO: Add interaction stuff with atticdoor, chest, wardrobe, and album
 }
 
-void Attic::render()
+void Attic::renderScene()
 {
     ClearBackground(BLACK);
 
@@ -385,7 +385,10 @@ void Attic::render()
 
     mGameState.player->render();
     // mGameState.player->displayCollider();
+    
+}
 
+void Attic::renderDialogue(){
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();
         
@@ -452,7 +455,12 @@ void Attic::render()
 
         DrawText(hint, drawX, drawY, fontSize, WHITE);
     }
-    
+}
+
+void Attic::render()
+{
+    renderScene();
+    renderDialogue();
 }
 
 void Attic::shutdown()

@@ -178,8 +178,9 @@ void render()
         Vector2 playerWorld = gCurrentScene->getState().player->getPosition();
         gShader.begin();
         gShader.setVector2("lightPosition", playerWorld);
-        gCurrentScene->render();
+        gCurrentScene->renderScene();
         gShader.end();
+        gCurrentScene->renderDialogue();
     }
 
     else{

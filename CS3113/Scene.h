@@ -127,6 +127,9 @@ public:
     // for shaders
     virtual bool usesFadeEffect() const { return false; }
 
+    virtual void renderScene() { render(); }
+    virtual void renderDialogue() {}
+
     GameState   getState()           const { return mGameState; }
     Vector2     getOrigin()          const { return mOrigin;    }
     const char* getBGColourHexCode() const { return mBGColourHexCode; }
