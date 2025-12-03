@@ -147,6 +147,8 @@ void Attic::initialise()
         NONE
     );
 
+    // gShader = LoadShader("assets/shaders/vertex.vs", "assets/shaders/fragment.fs");
+
 }
 
 void Attic::update(float deltaTime)
@@ -164,9 +166,9 @@ void Attic::update(float deltaTime)
     if (IsKeyDown(KEY_W)) mGameState.player->animate(deltaTime);
     if (IsKeyDown(KEY_S)) mGameState.player->animate(deltaTime);
 
-    bool nearChest = mGameState.player->isColliding(mGameState.chest);
-    bool nearWardrobe = mGameState.player->isColliding(mGameState.wardrobe);
-    bool nearAlbum = mGameState.player->isColliding(mGameState.album);
+    nearChest = mGameState.player->isColliding(mGameState.chest);
+    nearWardrobe = mGameState.player->isColliding(mGameState.wardrobe);
+    nearAlbum = mGameState.player->isColliding(mGameState.album);
     bool nearAtticDoor = mGameState.player->isColliding(mGameState.atticdoor);
 
     // PUZZLE 1 LOGIC FOR ENTERIGN TEH COMBO
@@ -269,7 +271,7 @@ void Attic::update(float deltaTime)
         if (nearAlbum && mGameState.dialogueText == "it's open...") {
             mGameState.dialogueActive = false;
             mGameState.dialogueStep = 0;
-            mGameState.nextSceneID = 13; // go to final memory
+            mGameState.nextSceneID = 14; // go to final memory
             return;
         }
 
@@ -386,6 +388,29 @@ void Attic::render()
     mGameState.player->render();
     // mGameState.player->displayCollider();
 
+    // gShader.setFloat("vignetteStrength", 0.5f); // vignette aroudn the room
+
+    // gShader.setFloat("glowStrength", 0.0f); // reset when not near
+
+    // // glow effect on interactables
+    // if (nearChest){
+    //     glowPosNormalized = mGameState.chest->getPosition();
+    //     gShader.setVector2("glowPosition", glowPosNormalized);
+    //     gShader.setFloat("glowStrength", 1.0f);
+    // }
+    
+    // if (nearWardrobe){
+    //     glowPosNormalized = mGameState.wardrobe->getPosition();
+    //     gShader.setVector2("glowPosition", glowPosNormalized);
+    //     gShader.setFloat("glowStrength", 1.0f);
+    // }
+
+    // if (nearAlbum){
+    //     glowPosNormalized = mGameState.album->getPosition();
+    //     gShader.setVector2("glowPosition", glowPosNormalized);
+    //     gShader.setFloat("glowStrength", 1.0f);
+    // }
+
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();
         
@@ -428,9 +453,9 @@ void Attic::render()
         }
     }
 
-    bool nearChest = mGameState.player->isColliding(mGameState.chest);
-    bool nearWardrobe = mGameState.player->isColliding(mGameState.wardrobe);
-    bool nearAlbum = mGameState.player->isColliding(mGameState.album);
+    nearChest = mGameState.player->isColliding(mGameState.chest);
+    nearWardrobe = mGameState.player->isColliding(mGameState.wardrobe);
+    nearAlbum = mGameState.player->isColliding(mGameState.album);
     bool nearAtticDoor = mGameState.player->isColliding(mGameState.atticdoor);
 
     // showing that you can interact with the corner text

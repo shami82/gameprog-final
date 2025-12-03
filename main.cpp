@@ -1,10 +1,10 @@
-#include "CS3113/Clue3.h"
+#include "CS3113/Effects.h"
 
 // Global Constants
 constexpr int SCREEN_WIDTH     = 990,
               SCREEN_HEIGHT    = 720,
               FPS              = 120,
-              NUMBER_OF_LEVELS = 14; // 5 rooms,1 start,1 instr,1 intro,2 end,3 memories,3 clues, 1 effect, 1 shader
+              NUMBER_OF_LEVELS = 16; // 5 rooms,1 start,1 instr,1 intro,2 end,3 memories,3 clues, 1 effect, 1 shader
 
 constexpr Vector2 ORIGIN       = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
@@ -35,8 +35,10 @@ Clue2 *gClue2 = nullptr;
 Mem2 *gMem2 = nullptr;
 Bedroom *gBedroom = nullptr;
 Clue3 *gClue3 = nullptr;
-// End *gEnd = nullptr;
-// Effects *gEffects = nullptr;
+End *gEnd = nullptr;
+Effects *gEffects = nullptr;
+// ShaderProgram gShader;
+Vector2 gLightPosition = { 0.0f, 0.0f };
 
 
 // Function Declarations
@@ -51,12 +53,17 @@ void switchToScene(Scene *scene)
 {   
     gCurrentScene = scene;
     gCurrentScene->initialise();
+
+    gEffects->start(FADEIN);
+    gEffects->setEffectSpeed(1.5f);
 }
 
 void initialise()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Still Here");
     InitAudioDevice();
+
+    // gShader.load("CS3113/shaders/vertex.glsl", "CS3113/shaders/fragment.glsl");
 
     gStart = new Start(ORIGIN, "#2D2A2A");
     gInstruction = new Instruction(ORIGIN, "#2D2A2A");
@@ -72,8 +79,8 @@ void initialise()
     gMem2 = new Mem2(ORIGIN, "#2D2A2A");
     gBedroom = new Bedroom(ORIGIN, "#2D2A2A");
     gClue3 = new Clue3(ORIGIN, "#2D2A2A");
-    // gEnd = new End(ORIGIN, "#2D2A2A");
-    // gEffects = new Effects(ORIGIN, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+    gEnd = new End(ORIGIN, "#2D2A2A");
+    gEffects = new Effects(ORIGIN, (float) SCREEN_WIDTH * 1.5f, (float) SCREEN_HEIGHT * 1.5f);
 
     gLevels.push_back(gStart);
     gLevels.push_back(gInstruction);
@@ -89,8 +96,7 @@ void initialise()
     gLevels.push_back(gMem2);
     gLevels.push_back(gBedroom);
     gLevels.push_back(gClue3);
-    // gLevels.push_back(gEnd);
-    // gLevels.push_back(gEffects);
+    gLevels.push_back(gEnd);
 
     switchToScene(gLevels[0]); // change to see specific scenes
 
@@ -103,7 +109,7 @@ void processInput()
        && gCurrentScene != gLevels[2] && gCurrentScene != gLevels[6]
        && gCurrentScene != gLevels[7] && gCurrentScene != gLevels[8]
        && gCurrentScene != gLevels[10] && gCurrentScene != gLevels[11]
-       && gCurrentScene != gLevels[13]){
+       && gCurrentScene != gLevels[13] && gCurrentScene != gLevels[14]){ // these dont have a player
         gCurrentScene->getState().player->resetMovement();
 
         Vector2 movement = gCurrentScene->getState().player->getMovement();
@@ -143,6 +149,12 @@ void update()
 
     while (deltaTime >= FIXED_TIMESTEP)
     {
+        Vector2 camTarget = gCurrentScene->getState().player ?
+                    gCurrentScene->getState().player->getPosition() :
+                    ORIGIN;
+        gEffects->update(FIXED_TIMESTEP, &camTarget);
+        gLightPosition = camTarget;
+        gLightPosition = camTarget;
         gCurrentScene->update(FIXED_TIMESTEP);
         deltaTime -= FIXED_TIMESTEP;
     }
@@ -151,6 +163,13 @@ void update()
 void render()
 {
     BeginDrawing();
+
+    bool useEffect = gCurrentScene->usesFadeEffect();
+
+    // if (useEffect){
+    //     gShader.begin();
+    //     gShader.setVector2("lightPosition", gLightPosition);
+    // }
 
     // use camera when level has camera
     if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
@@ -162,8 +181,12 @@ void render()
         gCurrentScene->render();
     }
 
-    // if (gEffects)
-    //     gEffects->render();
+    // if (useShader){
+    //     gShader.end();
+    // }
+
+    if (useEffect)
+        gEffects->render();
 
     EndDrawing();
 }
@@ -184,8 +207,8 @@ void shutdown()
     delete gMem2;
     delete gBedroom;
     delete gClue3;
-    // delete gEnd;
-    // delete gEffects;
+    delete gEnd;
+    delete gEffects;
 
     for (int i = 0; i < NUMBER_OF_LEVELS; i++) gLevels[i] = nullptr;
 
@@ -202,10 +225,18 @@ int main(void)
         processInput();
         update();
 
-        if (gCurrentScene->getState().nextSceneID >= 0)
-        {
-            int id = gCurrentScene->getState().nextSceneID;
-            switchToScene(gLevels[id]);
+        // now has fade out
+        if (gCurrentScene->getState().nextSceneID >= 0 && !gIsTransitioning){
+            gIsTransitioning = true;
+            gNextSceneIndex = gCurrentScene->getState().nextSceneID;
+
+            gEffects->start(FADEOUT);
+            gEffects->setEffectSpeed(1.5f);
+        }
+
+        if (gIsTransitioning && gEffects->isFinished()){ // wait for fade then trasnition
+            gIsTransitioning = false;
+            switchToScene(gLevels[gNextSceneIndex]);
         }
 
         render();

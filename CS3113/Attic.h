@@ -26,6 +26,11 @@ private:
     std::string currentCode2 = "";
     const std::string correctCode2 = "0627"; // second puzzle answer
     
+    // ShaderProgram gShader;
+    // Vector2 glowPosNormalized;
+    bool nearChest;
+    bool nearWardrobe;
+    bool nearAlbum;
 
 public:
 
@@ -37,6 +42,7 @@ public:
     void update(float deltaTime) override;
     void render() override;
     void shutdown() override;
+    bool usesFadeEffect() const override { return true; }
 };
 
 #endif

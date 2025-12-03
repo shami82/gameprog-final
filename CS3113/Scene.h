@@ -124,6 +124,9 @@ public:
     static bool getKeyFound()                   { return keyFound; }
     static void setKeyFoundStatus(bool status)  { keyFound = status; }
 
+    // for shaders
+    virtual bool usesFadeEffect() const { return false; }
+
     GameState   getState()           const { return mGameState; }
     Vector2     getOrigin()          const { return mOrigin;    }
     const char* getBGColourHexCode() const { return mBGColourHexCode; }
