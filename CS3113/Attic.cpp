@@ -147,8 +147,6 @@ void Attic::initialise()
         NONE
     );
 
-    // gShader = LoadShader("assets/shaders/vertex.vs", "assets/shaders/fragment.fs");
-
 }
 
 void Attic::update(float deltaTime)
@@ -387,29 +385,6 @@ void Attic::render()
 
     mGameState.player->render();
     // mGameState.player->displayCollider();
-
-    // gShader.setFloat("vignetteStrength", 0.5f); // vignette aroudn the room
-
-    // gShader.setFloat("glowStrength", 0.0f); // reset when not near
-
-    // // glow effect on interactables
-    // if (nearChest){
-    //     glowPosNormalized = mGameState.chest->getPosition();
-    //     gShader.setVector2("glowPosition", glowPosNormalized);
-    //     gShader.setFloat("glowStrength", 1.0f);
-    // }
-    
-    // if (nearWardrobe){
-    //     glowPosNormalized = mGameState.wardrobe->getPosition();
-    //     gShader.setVector2("glowPosition", glowPosNormalized);
-    //     gShader.setFloat("glowStrength", 1.0f);
-    // }
-
-    // if (nearAlbum){
-    //     glowPosNormalized = mGameState.album->getPosition();
-    //     gShader.setVector2("glowPosition", glowPosNormalized);
-    //     gShader.setFloat("glowStrength", 1.0f);
-    // }
 
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();
