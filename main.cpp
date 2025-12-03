@@ -174,7 +174,7 @@ void render()
         EndMode2D();
     } 
 
-    else if (gCurrentScene == gLevels[3]){ // in the attic apply these shaders?
+    else if (gCurrentScene == gLevels[3]){ // in the attic apply these shaders
         Vector2 playerWorld = gCurrentScene->getState().player->getPosition();
         gShader.begin();
         gShader.setVector2("lightPosition", playerWorld);
@@ -187,7 +187,7 @@ void render()
         gCurrentScene->render();
     }
 
-    if (useEffect)
+    if (useEffect) // only for the rooms not the cutscenes and stuff
         gEffects->render();
 
     EndDrawing();
