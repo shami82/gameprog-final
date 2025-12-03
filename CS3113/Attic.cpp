@@ -188,7 +188,7 @@ void Attic::update(float deltaTime)
 
                 enteringCode = false;
                 mGameState.dialogueActive = true;
-                mGameState.dialogueText = "it opened...";
+                mGameState.dialogueText = "it opened..";
                 currentCode.clear();
                 return;
             }
@@ -238,7 +238,7 @@ void Attic::update(float deltaTime)
     }
 
     if (mGameState.dialogueActive && IsKeyPressed(KEY_E)){ // special case for if it opened
-        if (nearChest && mGameState.dialogueText == "it opened..."){
+        if (nearChest && mGameState.dialogueText == "it opened.."){
             mGameState.dialogueActive = false;
             mGameState.dialogueStep = 0;
             mGameState.nextSceneID = 8; // go to mem1

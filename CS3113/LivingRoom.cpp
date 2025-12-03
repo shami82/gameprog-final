@@ -399,26 +399,26 @@ void LivingRoom::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    mGameState.bg->displayCollider();
+    // mGameState.bg->displayCollider();
     mGameState.couch1->render();
-    mGameState.couch1->displayCollider();
+    // mGameState.couch1->displayCollider();
     mGameState.couch2->render();
-    mGameState.couch2->displayCollider();
+    // mGameState.couch2->displayCollider();
     mGameState.livingbookshelf->render();
-    mGameState.livingbookshelf->displayCollider();
+    // mGameState.livingbookshelf->displayCollider();
     mGameState.livingshelf->render();
-    mGameState.livingshelf->displayCollider();
+    // mGameState.livingshelf->displayCollider();
     mGameState.livingtable->render();
-    mGameState.livingtable->displayCollider();
+    // mGameState.livingtable->displayCollider();
     mGameState.livingstool->render();
-    mGameState.livingstool->displayCollider();
+    // mGameState.livingstool->displayCollider();
     mGameState.livingtv->render();
-    mGameState.livingtv->displayCollider();
+    // mGameState.livingtv->displayCollider();
     mGameState.livingstairs->render();
-    mGameState.livingstairs->displayCollider();
+    // mGameState.livingstairs->displayCollider();
 
     mGameState.player->render();
-    mGameState.player->displayCollider();
+    // mGameState.player->displayCollider();
 
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();

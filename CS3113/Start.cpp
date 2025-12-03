@@ -19,6 +19,23 @@ void Start::initialise()
         textureBG,                                      // texture file address
         NONE                                            // type
     );
+
+    Scene::setPuz1Status(false);
+    Scene::setPuz2Status(false);
+    Scene::setPuz3Status(false);
+
+    // for puzzle 1
+    Scene::setPol1Status(false);
+    Scene::setPol2Status(false);
+    Scene::setPol3Status(false);
+    Scene::setPol4Status(false);
+    
+    // for puzzle 2
+    Scene::setPicFoundStatus(false);
+    Scene::setPicPlacedStatus(false);
+
+    // for puzzle 3
+    Scene::setKeyFoundStatus(false);
 }
 
 void Start::update(float deltaTime)
@@ -33,15 +50,6 @@ void Start::render()
 
     mGameState.bg->render();
 
-    // // instr to start
-    // const char* msg = "Press [Enter] to Start";
-    // int fontSize = 30;
-    // int textWidth = MeasureText(msg, fontSize);
-    // DrawText(msg,
-    //          static_cast<int>((mOrigin.x - textWidth / 2) + 10.0f),
-    //          static_cast<int>(mOrigin.y + 85.0f),
-    //          fontSize,
-    //          WHITE);
 }
 
 void Start::shutdown()

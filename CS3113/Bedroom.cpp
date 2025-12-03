@@ -277,24 +277,24 @@ void Bedroom::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    mGameState.bg->displayCollider();
+    // mGameState.bg->displayCollider();
     mGameState.bedroombed->render();
-    mGameState.bedroombed->displayCollider();
+    // mGameState.bedroombed->displayCollider();
     mGameState.bedroomdresser->render();
-    mGameState.bedroomdresser->displayCollider();
+    // mGameState.bedroomdresser->displayCollider();
     mGameState.bedroomshelves->render();
-    mGameState.bedroomshelves->displayCollider();
+    // mGameState.bedroomshelves->displayCollider();
     mGameState.bedroomtable->render();
-    mGameState.bedroomtable->displayCollider();
+    // mGameState.bedroomtable->displayCollider();
     mGameState.bedroomwardrobe->render();
-    mGameState.bedroomwardrobe->displayCollider();
+    // mGameState.bedroomwardrobe->displayCollider();
     mGameState.bedroommirror->render();
-    mGameState.bedroommirror->displayCollider();
+    // mGameState.bedroommirror->displayCollider();
     mGameState.hallwaydoor->render();
-    mGameState.hallwaydoor->displayCollider();
+    // mGameState.hallwaydoor->displayCollider();
 
     mGameState.player->render();
-    mGameState.player->displayCollider();
+    // mGameState.player->displayCollider();
 
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();

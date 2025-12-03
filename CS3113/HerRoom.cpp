@@ -325,26 +325,26 @@ void HerRoom::render()
 
     // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
-    mGameState.bg->displayCollider();
+    // mGameState.bg->displayCollider();
     mGameState.herbed->render();
-    mGameState.herbed->displayCollider();
+    // mGameState.herbed->displayCollider();
     mGameState.hershelf->render();
-    mGameState.hershelf->displayCollider();
+    // mGameState.hershelf->displayCollider();
     mGameState.bookshelf->render();
-    mGameState.bookshelf->displayCollider();
+    // mGameState.bookshelf->displayCollider();
     mGameState.herchair->render();
-    mGameState.herchair->displayCollider();
+    // mGameState.herchair->displayCollider();
     mGameState.hertable->render();
-    mGameState.hertable->displayCollider();
+    // mGameState.hertable->displayCollider();
     mGameState.beanbag->render();
-    mGameState.beanbag->displayCollider();
+    // mGameState.beanbag->displayCollider();
     mGameState.herhallwaydoor->render();
-    mGameState.herhallwaydoor->displayCollider();
+    // mGameState.herhallwaydoor->displayCollider();
     mGameState.polaroids->render();
-    mGameState.polaroids->displayCollider();
+    // mGameState.polaroids->displayCollider();
 
     mGameState.player->render();
-    mGameState.player->displayCollider();
+    // mGameState.player->displayCollider();
 
     if (mGameState.dialogueActive){
         mGameState.dialoguebox->render();
