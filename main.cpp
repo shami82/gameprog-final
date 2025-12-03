@@ -1,10 +1,10 @@
-#include "CS3113/Bedroom.h"
+#include "CS3113/Clue3.h"
 
 // Global Constants
 constexpr int SCREEN_WIDTH     = 990,
               SCREEN_HEIGHT    = 720,
               FPS              = 120,
-              NUMBER_OF_LEVELS = 13; // 5 rooms,1 start,1 instr,1 intro,2 end,3 memories,3 clues
+              NUMBER_OF_LEVELS = 14; // 5 rooms,1 start,1 instr,1 intro,2 end,3 memories,3 clues, 1 effect, 1 shader
 
 constexpr Vector2 ORIGIN       = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
@@ -14,6 +14,9 @@ constexpr float FIXED_TIMESTEP = 1.0f / 60.0f;
 AppStatus gAppStatus   = RUNNING;
 float gPreviousTicks   = 0.0f,
       gTimeAccumulator = 0.0f;
+
+bool gIsTransitioning = false;
+int gNextSceneIndex = -1;
 
 Scene *gCurrentScene = nullptr;
 std::vector<Scene*> gLevels = {};
@@ -31,8 +34,9 @@ LivingRoom *gLivingRoom = nullptr;
 Clue2 *gClue2 = nullptr;
 Mem2 *gMem2 = nullptr;
 Bedroom *gBedroom = nullptr;
-// Clue3 *gClue3 = nullptr;
+Clue3 *gClue3 = nullptr;
 // End *gEnd = nullptr;
+// Effects *gEffects = nullptr;
 
 
 // Function Declarations
@@ -67,8 +71,9 @@ void initialise()
     gClue2 = new Clue2(ORIGIN, "#2D2A2A");
     gMem2 = new Mem2(ORIGIN, "#2D2A2A");
     gBedroom = new Bedroom(ORIGIN, "#2D2A2A");
-    // gClue3 = new Clue3(ORIGIN, "#2D2A2A");
+    gClue3 = new Clue3(ORIGIN, "#2D2A2A");
     // gEnd = new End(ORIGIN, "#2D2A2A");
+    // gEffects = new Effects(ORIGIN, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 
     gLevels.push_back(gStart);
     gLevels.push_back(gInstruction);
@@ -83,10 +88,11 @@ void initialise()
     gLevels.push_back(gClue2);
     gLevels.push_back(gMem2);
     gLevels.push_back(gBedroom);
-    // gLevels.push_back(gClue3);
+    gLevels.push_back(gClue3);
     // gLevels.push_back(gEnd);
+    // gLevels.push_back(gEffects);
 
-    switchToScene(gLevels[12]); // change to see specific scenes
+    switchToScene(gLevels[0]); // change to see specific scenes
 
     SetTargetFPS(FPS);
 }
@@ -96,7 +102,8 @@ void processInput()
     if(gCurrentScene != gLevels[0] && gCurrentScene != gLevels[1]
        && gCurrentScene != gLevels[2] && gCurrentScene != gLevels[6]
        && gCurrentScene != gLevels[7] && gCurrentScene != gLevels[8]
-       && gCurrentScene != gLevels[10] && gCurrentScene != gLevels[11]){
+       && gCurrentScene != gLevels[10] && gCurrentScene != gLevels[11]
+       && gCurrentScene != gLevels[13]){
         gCurrentScene->getState().player->resetMovement();
 
         Vector2 movement = gCurrentScene->getState().player->getMovement();
@@ -155,6 +162,9 @@ void render()
         gCurrentScene->render();
     }
 
+    // if (gEffects)
+    //     gEffects->render();
+
     EndDrawing();
 }
 
@@ -173,8 +183,9 @@ void shutdown()
     delete gClue2;
     delete gMem2;
     delete gBedroom;
-    // delete gClue3;
+    delete gClue3;
     // delete gEnd;
+    // delete gEffects;
 
     for (int i = 0; i < NUMBER_OF_LEVELS; i++) gLevels[i] = nullptr;
 

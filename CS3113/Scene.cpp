@@ -14,6 +14,9 @@ bool Scene::polaroid4Found = false;
 bool Scene::picFound = false;
 bool Scene::picPlaced = false;
 
+// for the third puzzle
+bool Scene::keyFound = false;
+
 Scene::Scene() : mOrigin{{}} {}
 
 Scene::Scene(Vector2 origin, const char *bgHexCode) : mOrigin{origin}, mBGColourHexCode {bgHexCode} 

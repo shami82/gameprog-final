@@ -231,7 +231,7 @@ void Bedroom::update(float deltaTime)
     bool nearWardrobe = mGameState.player->isColliding(mGameState.bedroomwardrobe);
     bool nearMirror = mGameState.player->isColliding(mGameState.bedroommirror);
 
-    // bool keyFound = Scene::getKeyFound();
+    bool keyFound = Scene::getKeyFound();
 
     if (mGameState.dialogueActive && IsKeyPressed(KEY_E)){
         mGameState.dialogueActive = false;
@@ -241,12 +241,11 @@ void Bedroom::update(float deltaTime)
 
     if (IsKeyPressed(KEY_E) && !mGameState.dialogueActive){
         if (nearMirror){ // go to the clue3 scene
-            mirrorInteracted = true;
-            mGameState.nextSceneID = 6; // TODO: CHANGE TO CLUE SCENE
+            mGameState.nextSceneID = 13; // TODO: CHANGE TO CLUE SCENE
             return;
         }
         if (nearHallwayDoor){ // can't leave unless clues are found
-            if(mirrorInteracted){ // could now go to hallway bcuz saved
+            if(keyFound){ // could now go to hallway bcuz saved
                 mGameState.nextSceneID = 4; // go to hallway
                 return;
             }
@@ -257,9 +256,9 @@ void Bedroom::update(float deltaTime)
                 return;
             }
         }
-        if ((nearBed && !mirrorInteracted) || (nearDresser && !mirrorInteracted) || 
-            (nearShelves && !mirrorInteracted) || (nearTable && !mirrorInteracted) ||
-            (nearWardrobe && !mirrorInteracted)){ // finding the first polaroid
+        if ((nearBed && !keyFound) || (nearDresser && !keyFound) || 
+            (nearShelves && !keyFound) || (nearTable && !keyFound) ||
+            (nearWardrobe && !keyFound)){ // finding the first polaroid
             mGameState.dialogueActive = true;
             mGameState.dialogueText = "...";
             mGameState.dialogueStep = 0;
@@ -319,8 +318,9 @@ void Bedroom::render()
     bool nearWardrobe = mGameState.player->isColliding(mGameState.bedroomwardrobe);
     bool nearMirror = mGameState.player->isColliding(mGameState.bedroommirror);
 
-    if (nearHallwayDoor || nearBed || nearDresser || nearTable || nearShelves ||
-        nearWardrobe || nearMirror){
+    if (nearHallwayDoor || (nearBed && !keyFound) || (nearDresser && !keyFound) || 
+        (nearShelves && !keyFound) || (nearTable && !keyFound) || (nearWardrobe && !keyFound) 
+        || nearMirror){
         int screenW = GetScreenWidth();
         int screenH = GetScreenHeight();
         const char *hint = "[E] to Interact";

@@ -191,7 +191,7 @@ void Hallway::update(float deltaTime)
                 mGameState.dialogueText = "Wait, no, this isn't the place";
                 return;
             }
-            mGameState.nextSceneID = 4; // TODO: CHANGE TO BEDROOM
+            mGameState.nextSceneID = 12; // TODO: CHANGE TO BEDROOM
             return;
         }
     }

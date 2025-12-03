@@ -61,6 +61,7 @@ struct GameState
     Music bgm;
     Sound stairsSound;
     Sound doorSound;
+    Sound heatbeatSound;
 
     Camera2D camera;
 
