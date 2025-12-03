@@ -1,4 +1,4 @@
-#include "CS3113/Effects.h"
+#include "CS3113/ShaderProgram.h"
 
 // Global Constants
 constexpr int SCREEN_WIDTH     = 990,
@@ -37,7 +37,7 @@ Bedroom *gBedroom = nullptr;
 Clue3 *gClue3 = nullptr;
 End *gEnd = nullptr;
 Effects *gEffects = nullptr;
-// ShaderProgram gShader;
+ShaderProgram gShader;
 Vector2 gLightPosition = { 0.0f, 0.0f };
 
 
@@ -63,7 +63,7 @@ void initialise()
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Still Here");
     InitAudioDevice();
 
-    // gShader.load("CS3113/shaders/vertex.glsl", "CS3113/shaders/fragment.glsl");
+    gShader.load("shaders/vertex.glsl", "shaders/fragment.glsl");
 
     gStart = new Start(ORIGIN, "#2D2A2A");
     gInstruction = new Instruction(ORIGIN, "#2D2A2A");
@@ -80,6 +80,7 @@ void initialise()
     gBedroom = new Bedroom(ORIGIN, "#2D2A2A");
     gClue3 = new Clue3(ORIGIN, "#2D2A2A");
     gEnd = new End(ORIGIN, "#2D2A2A");
+
     gEffects = new Effects(ORIGIN, (float) SCREEN_WIDTH * 1.5f, (float) SCREEN_HEIGHT * 1.5f);
 
     gLevels.push_back(gStart);
@@ -166,24 +167,24 @@ void render()
 
     bool useEffect = gCurrentScene->usesFadeEffect();
 
-    // if (useEffect){
-    //     gShader.begin();
-    //     gShader.setVector2("lightPosition", gLightPosition);
-    // }
-
     // use camera when level has camera
     if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
         BeginMode2D(gCurrentScene->getState().camera);
         gCurrentScene->render();
         EndMode2D();
     } 
+
+    else if (gCurrentScene == gLevels[3]){ // in the attic apply these shaders?
+        Vector2 playerWorld = gCurrentScene->getState().player->getPosition();
+        gShader.begin();
+        gShader.setVector2("lightPosition", playerWorld);
+        gCurrentScene->render();
+        gShader.end();
+    }
+
     else{
         gCurrentScene->render();
     }
-
-    // if (useShader){
-    //     gShader.end();
-    // }
 
     if (useEffect)
         gEffects->render();
