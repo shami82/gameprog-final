@@ -16,16 +16,6 @@ void BadEnd::initialise()
     textureDialogueBox = LoadTexture("assets/dialoguebox.PNG");
     mGameState.nextSceneID = -1;
 
-    // reset everything
-    Scene::setPuz1Status(false);
-    Scene::setPuz2Status(false);
-    Scene::setPuz3Status(false);
-
-    Scene::setPol1Status(false);
-    Scene::setPol2Status(false);
-    Scene::setPol3Status(false);
-    Scene::setPol4Status(false);
-
     // mGameState.bgm = LoadMusicStream("assets/void.mp3");
     // SetMusicVolume(mGameState.bgm, 0.50f);
     // PlayMusicStream(mGameState.bgm);
