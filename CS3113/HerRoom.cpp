@@ -57,14 +57,14 @@ void HerRoom::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x * 0.5f , // TODO: make little smaller?
-        mGameState.player->getScale().y * 0.4f  // TODO: make little smaller?
+        mGameState.player->getScale().x * 0.5f ,
+        mGameState.player->getScale().y * 0.4f
     });
     mGameState.player->setColliderOffset({
         0.0f,
-        mGameState.player->getScale().y * 0.25f // bottom half of the sprite
+        mGameState.player->getScale().y * 0.25f + 10.0f // bottom half of the sprite
     });
-    mGameState.player->setSpeed(150);
+    mGameState.player->setSpeed(130);
     mGameState.player->setDirection(UP); // facing the things in the room
 
     // ------------ HER BED -------------
@@ -76,7 +76,7 @@ void HerRoom::initialise()
         NONE
     );
     mGameState.herbed->setColliderDimensions({ 
-        mGameState.herbed->getScale().x + 10.0f, // little bigger?
+        mGameState.herbed->getScale().x + 10.0f,
         mGameState.herbed->getScale().y + 10.0f
     });
     
@@ -89,7 +89,7 @@ void HerRoom::initialise()
         NONE
     );
     mGameState.bookshelf->setColliderDimensions({ 
-        mGameState.bookshelf->getScale().x + 10.0f, // little bigger?
+        mGameState.bookshelf->getScale().x + 10.0f,
         mGameState.bookshelf->getScale().y + 10.0f
     });
     
@@ -102,7 +102,7 @@ void HerRoom::initialise()
         NONE
     );
     mGameState.herchair->setColliderDimensions({ 
-        mGameState.herchair->getScale().x + 10.0f, // little bigger?
+        mGameState.herchair->getScale().x + 10.0f,
         mGameState.herchair->getScale().y + 10.0f
     });
 
@@ -115,7 +115,7 @@ void HerRoom::initialise()
         NONE
     );
     mGameState.hertable->setColliderDimensions({ 
-        mGameState.hertable->getScale().x + 10.0f, // little bigger?
+        mGameState.hertable->getScale().x + 10.0f,
         mGameState.hertable->getScale().y + 10.0f
     });
 
@@ -128,7 +128,7 @@ void HerRoom::initialise()
         NONE
     );
     mGameState.hershelf->setColliderDimensions({ 
-        mGameState.hershelf->getScale().x + 10.0f, // little bigger?
+        mGameState.hershelf->getScale().x + 10.0f,
         mGameState.hershelf->getScale().y + 10.0f
     });
 
@@ -141,7 +141,7 @@ void HerRoom::initialise()
         NONE
     );
     mGameState.beanbag->setColliderDimensions({ 
-        mGameState.beanbag->getScale().x + 10.0f, // little bigger?
+        mGameState.beanbag->getScale().x + 10.0f,
         mGameState.beanbag->getScale().y + 10.0f
     });
     
@@ -154,7 +154,7 @@ void HerRoom::initialise()
         NONE
     );
     mGameState.herhallwaydoor->setColliderDimensions({ 
-        mGameState.herhallwaydoor->getScale().x + 10.0f, // little bigger?
+        mGameState.herhallwaydoor->getScale().x + 10.0f,
         mGameState.herhallwaydoor->getScale().y + 10.0f
     });
 
@@ -203,9 +203,7 @@ void HerRoom::initialise()
 
 void HerRoom::update(float deltaTime)
 {
-    // UpdateMusicStream(mGameState.bgm);
 
-    // TODO: add the E key interact thing for the dialogue
     if (waitingForIntroDialogue){ // timer before intro dialogue
         dialogueDelayTimer += deltaTime;
 
@@ -257,10 +255,10 @@ void HerRoom::update(float deltaTime)
 
     if (IsKeyPressed(KEY_E) && !mGameState.dialogueActive){
         if (nearPolaroids){ // when the polaroids are there, send to first clue scene
-            mGameState.nextSceneID = 6; // TODO: CHANGE TO CLUE SCENE
+            mGameState.nextSceneID = 6;
             return;
         }
-        if (nearHallwayDoor){ // can't leave unless clues are found (maybe change? not needed)
+        if (nearHallwayDoor){ // can't leave unless clues are found
             if(pol1 && pol2 && pol3 && pol4 && seePolaroids){ // could just go to hallway bcuz saved
                 PlaySound(mGameState.doorSound);
                 mGameState.nextSceneID = 4; // go to hallway
