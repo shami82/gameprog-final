@@ -17,6 +17,8 @@ void Hallway::initialise()
 
     mGameState.doorSound = LoadSound("assets/audio/door.wav");
     SetSoundVolume(mGameState.doorSound, 0.75f);
+    mGameState.stairsSound = LoadSound("assets/audio/stairs.mp3");
+    SetSoundVolume(mGameState.stairsSound, 1.0f);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -159,6 +161,7 @@ void Hallway::update(float deltaTime)
 
     if (IsKeyPressed(KEY_E)){
         if (nearAtticStairs){
+            PlaySound(mGameState.stairsSound);
             mGameState.nextSceneID = 3; // go to attic
             return;
         }
@@ -173,6 +176,7 @@ void Hallway::update(float deltaTime)
                 mGameState.dialogueText = "Wait, no, this isn't the place";
                 return;
             }
+            PlaySound(mGameState.stairsSound);
             mGameState.nextSceneID = 9; // TODO: CHANGE TO LIVINGROOM
             return;
         }
@@ -260,6 +264,7 @@ void Hallway::shutdown()
     delete mGameState.livingroomdoor;
 
     UnloadTexture(textureDialogueBox);
-    
+
     UnloadSound(mGameState.doorSound);
+    UnloadSound(mGameState.stairsSound);
 }

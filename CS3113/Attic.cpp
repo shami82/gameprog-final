@@ -18,9 +18,8 @@ void Attic::initialise()
     textureAlbumSolved = LoadTexture("assets/attic/album2.PNG");
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.stairsSound = LoadSound("assets/audio/stairs.mp3");
+    SetSoundVolume(mGameState.stairsSound, 1.0f);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -151,9 +150,6 @@ void Attic::initialise()
 
 void Attic::update(float deltaTime)
 {
-    // UpdateMusicStream(mGameState.bgm);
-    // make a vector and pass that here for the vector of entities
-    // mGameState.player->update(deltaTime, nullptr, nullptr, 0);
     mGameState.player->update(deltaTime,
                           mGameState.player,
                           collidables,
@@ -280,6 +276,7 @@ void Attic::update(float deltaTime)
 
     if (IsKeyPressed(KEY_E) && !mGameState.dialogueActive){
         if (nearAtticDoor){
+            PlaySound(mGameState.stairsSound);
             mGameState.nextSceneID = 4; // go to hallway
             return;
         }
@@ -364,7 +361,6 @@ void Attic::update(float deltaTime)
         }
     }
 
-    // TODO: Add interaction stuff with atticdoor, chest, wardrobe, and album
 }
 
 void Attic::renderScene()
@@ -475,5 +471,6 @@ void Attic::shutdown()
     UnloadTexture(textureAlbum);
     UnloadTexture(textureAlbumSolved);
     UnloadTexture(textureDialogueBox);
-    // UnloadMusicStream(mGameState.bgm);
+
+    UnloadSound(mGameState.stairsSound);
 }

@@ -20,9 +20,8 @@ void LivingRoom::initialise()
     textureLivingTV = LoadTexture("assets/livingroom/tv.PNG");;
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.stairsSound = LoadSound("assets/audio/stairs.mp3");
+    SetSoundVolume(mGameState.stairsSound, 1.0f);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -166,7 +165,7 @@ void LivingRoom::initialise()
     
     // ------------ LIVING STAIRS -------------
     mGameState.livingstairs = new Entity(
-        {840.0f, 182.5f},
+        {835.0f, 182.5f},
         {static_cast<float>(textureLivingStairs.width),
          static_cast<float>(textureLivingStairs.height)},
         textureLivingStairs,
@@ -278,6 +277,7 @@ void LivingRoom::update(float deltaTime)
     if (IsKeyPressed(KEY_E) && !mGameState.dialogueActive){
         if (nearStairs){ // can't leave unless clues are found (maybe change? not needed)
             if(picPlaced){ // could just go to hallway bcuz saved
+                PlaySound(mGameState.stairsSound);
                 mGameState.nextSceneID = 4; // go to hallway
                 return;
             }
@@ -467,5 +467,5 @@ void LivingRoom::shutdown()
     delete mGameState.livingtv;
 
     UnloadTexture(textureDialogueBox);
-    // UnloadMusicStream(mGameState.bgm);
+    UnloadSound(mGameState.stairsSound);
 }
