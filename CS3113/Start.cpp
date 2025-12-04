@@ -29,6 +29,7 @@ void Start::initialise()
     Scene::setPol2Status(false);
     Scene::setPol3Status(false);
     Scene::setPol4Status(false);
+    Scene::setSeePolaroids(false);
     
     // for puzzle 2
     Scene::setPicFoundStatus(false);

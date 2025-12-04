@@ -15,9 +15,8 @@ void Hallway::initialise()
     textureLivingroomDoor = LoadTexture("assets/hallway/livingroomdoor.PNG");
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.doorSound = LoadSound("assets/audio/door.wav");
+    SetSoundVolume(mGameState.doorSound, 0.75f);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -164,18 +163,10 @@ void Hallway::update(float deltaTime)
             return;
         }
         if (nearHerDoor){
+            PlaySound(mGameState.doorSound);
             mGameState.nextSceneID = 5; // TODO: CHANGE TO HER ROOM
             return;
         }
-        // below is what will happen after setting the other rooms
-        // if (nearBedroomDoor){
-        //     mGameState.nextSceneID = 2; // bedroom
-        //     return;
-        // }
-        // if (nearLivingroomDoor){
-        //     mGameState.nextSceneID = 3; // living room
-        //     return;
-        // }
         if (nearLivingroomDoor){
             if (!Scene::getPuz1Status()){ // can only go after puzzle 2 complete
                 mGameState.dialogueActive = true;
@@ -191,6 +182,7 @@ void Hallway::update(float deltaTime)
                 mGameState.dialogueText = "Wait, no, this isn't the place";
                 return;
             }
+            PlaySound(mGameState.doorSound);
             mGameState.nextSceneID = 12; // TODO: CHANGE TO BEDROOM
             return;
         }
@@ -268,5 +260,6 @@ void Hallway::shutdown()
     delete mGameState.livingroomdoor;
 
     UnloadTexture(textureDialogueBox);
-    // UnloadMusicStream(mGameState.bgm);
+    
+    UnloadSound(mGameState.doorSound);
 }

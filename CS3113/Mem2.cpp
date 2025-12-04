@@ -26,7 +26,7 @@ void Mem2::initialise()
     Scene::setPuz2Status(true);
 
     mGameState.bgm = LoadMusicStream("assets/audio/memory.mp3");
-    SetMusicVolume(mGameState.bgm, 0.70f);
+    SetMusicVolume(mGameState.bgm, 0.85f);
     mGameState.ringing = LoadSound("assets/audio/ringing.mp3");
     SetSoundVolume(mGameState.ringing, 1.0f);
     PlayMusicStream(mGameState.bgm);

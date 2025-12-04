@@ -23,6 +23,8 @@ void Clue1::initialise()
     SetMusicVolume(mGameState.heartbeatLoop, 0.7f);
     PlaySound(mGameState.sigh); // start with the sigh
 
+    Scene::setSeePolaroids(true);
+
     mGameState.bg = new Entity(
         mOrigin,                                        // position
         { 990.0f, 720.0f },                             // size

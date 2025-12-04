@@ -19,9 +19,8 @@ void HerRoom::initialise()
     texturePolaroids = LoadTexture("assets/herroom/polaroids.PNG");
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.doorSound = LoadSound("assets/audio/door.wav");
+    SetSoundVolume(mGameState.doorSound, 0.75f);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -248,6 +247,7 @@ void HerRoom::update(float deltaTime)
     bool pol2 = Scene::getPol2Status();
     bool pol3 = Scene::getPol3Status();
     bool pol4 = Scene::getPol4Status();
+    bool seePolaroids = Scene::getSeePolaroids();
 
     if (mGameState.dialogueActive && IsKeyPressed(KEY_E)){
         mGameState.dialogueActive = false;
@@ -261,7 +261,8 @@ void HerRoom::update(float deltaTime)
             return;
         }
         if (nearHallwayDoor){ // can't leave unless clues are found (maybe change? not needed)
-            if(pol1 && pol2 && pol3 && pol4){ // could just go to hallway bcuz saved
+            if(pol1 && pol2 && pol3 && pol4 && seePolaroids){ // could just go to hallway bcuz saved
+                PlaySound(mGameState.doorSound);
                 mGameState.nextSceneID = 4; // go to hallway
                 return;
             }
@@ -315,15 +316,12 @@ void HerRoom::update(float deltaTime)
         }
     }
 
-    // TODO: Add interaction stuff
-    // TODO: Fix dialogue system so no double clicks
 }
 
 void HerRoom::render()
 {
     ClearBackground(BLACK);
 
-    // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
     // mGameState.bg->displayCollider();
     mGameState.herbed->render();
@@ -406,5 +404,5 @@ void HerRoom::shutdown()
     delete mGameState.polaroids;
 
     UnloadTexture(textureDialogueBox);
-    // UnloadMusicStream(mGameState.bgm);
+    UnloadSound(mGameState.doorSound);
 }

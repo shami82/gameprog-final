@@ -18,9 +18,8 @@ void Bedroom::initialise()
     textureMirror = LoadTexture("assets/bedroom/mirror.PNG");;
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.doorSound = LoadSound("assets/audio/door.wav");
+    SetSoundVolume(mGameState.doorSound, 0.75f);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -246,6 +245,7 @@ void Bedroom::update(float deltaTime)
         }
         if (nearHallwayDoor){ // can't leave unless clues are found
             if(keyFound){ // could now go to hallway bcuz saved
+                PlaySound(mGameState.doorSound);
                 mGameState.nextSceneID = 4; // go to hallway
                 return;
             }
@@ -267,8 +267,6 @@ void Bedroom::update(float deltaTime)
 
     }
 
-    // TODO: Add interaction stuff
-    // TODO: Fix dialogue system so no double clicks
 }
 
 void Bedroom::render()
@@ -351,5 +349,5 @@ void Bedroom::shutdown()
     delete mGameState.hallwaydoor;
 
     UnloadTexture(textureDialogueBox);
-    // UnloadMusicStream(mGameState.bgm);
+    UnloadSound(mGameState.doorSound);
 }
