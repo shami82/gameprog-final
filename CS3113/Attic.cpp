@@ -262,6 +262,14 @@ void Attic::update(float deltaTime)
             return;
         }
 
+        if (nearAlbum && Scene::getPuz2Status() && !Scene::getKeyFound()){
+            if (mGameState.dialogueStep == 1){
+                mGameState.dialogueStep = 2;
+                mGameState.dialogueText = "I need the key...";
+                return;
+            }
+        }
+
         if (nearAlbum && mGameState.dialogueText == "it's open...") {
             mGameState.dialogueActive = false;
             mGameState.dialogueStep = 0;
