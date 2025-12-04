@@ -56,8 +56,8 @@ void Attic::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x * 0.9f , // TODO: make little smaller?
-        mGameState.player->getScale().y * 0.5f  // TODO: make little smaller?
+        mGameState.player->getScale().x * 0.9f ,
+        mGameState.player->getScale().y * 0.5f
     });
     mGameState.player->setColliderOffset({
         0.0f,
@@ -75,7 +75,7 @@ void Attic::initialise()
         NONE
     );
     mGameState.wardrobe->setColliderDimensions({ 
-        mGameState.wardrobe->getScale().x + 10.0f, // little bigger?
+        mGameState.wardrobe->getScale().x + 10.0f,
         mGameState.wardrobe->getScale().y + 10.0f
     });
 
@@ -92,7 +92,7 @@ void Attic::initialise()
         NONE
     );
     mGameState.chest->setColliderDimensions({ 
-        mGameState.chest->getScale().x + 10.0f, // little bigger?
+        mGameState.chest->getScale().x + 10.0f,
         mGameState.chest->getScale().y + 10.0f
     });
 
@@ -109,7 +109,7 @@ void Attic::initialise()
         NONE
     );
     mGameState.album->setColliderDimensions({ 
-        mGameState.album->getScale().x + 10.0f, // little bigger?
+        mGameState.album->getScale().x + 10.0f,
         mGameState.album->getScale().y + 10.0f
     });
 
@@ -126,7 +126,7 @@ void Attic::initialise()
         NONE
     );
     mGameState.atticdoor->setColliderDimensions({ 
-        mGameState.atticdoor->getScale().x + 10.0f, // little bigger?
+        mGameState.atticdoor->getScale().x + 10.0f,
         mGameState.atticdoor->getScale().y + 10.0f
     });
 
@@ -367,7 +367,6 @@ void Attic::renderScene()
 {
     ClearBackground(BLACK);
 
-    // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
     // mGameState.bg->displayCollider();
     mGameState.wardrobe->render();
@@ -433,7 +432,6 @@ void Attic::renderDialogue(){
     bool nearAtticDoor = mGameState.player->isColliding(mGameState.atticdoor);
 
     // showing that you can interact with the corner text
-    // TODO: FIX THIS SO IT DOESNT SHOW WHEN CHEST COMPLETE
     bool canInteract = (
         (nearChest && !getPuz1Status()) || (nearWardrobe && !getPuz2Status()) || nearAlbum || nearAtticDoor || 
         mGameState.dialogueActive

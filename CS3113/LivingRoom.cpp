@@ -389,15 +389,12 @@ void LivingRoom::update(float deltaTime)
         }
     }
 
-    // TODO: Add interaction stuff
-    // TODO: Fix dialogue system so no double clicks
 }
 
 void LivingRoom::render()
 {
     ClearBackground(BLACK);
 
-    // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
     // mGameState.bg->displayCollider();
     mGameState.couch1->render();
@@ -429,15 +426,16 @@ void LivingRoom::render()
         DrawText(mGameState.dialogueText.c_str(), x, y, 24, WHITE);
     }
 
-    bool canInteract = mGameState.player->isColliding(mGameState.couch1) ||
+    bool canInteract = ((mGameState.player->isColliding(mGameState.couch1) ||
                        mGameState.player->isColliding(mGameState.couch2) ||
                        mGameState.player->isColliding(mGameState.livingbookshelf) ||
                        mGameState.player->isColliding(mGameState.livingshelf) ||
                        mGameState.player->isColliding(mGameState.livingtable) ||
                        mGameState.player->isColliding(mGameState.livingstool) ||
-                       mGameState.player->isColliding(mGameState.livingtv) ||
-                       mGameState.player->isColliding(mGameState.livingstairs) ||
-                       mGameState.dialogueActive;
+                       mGameState.player->isColliding(mGameState.livingtv))
+                       && !Scene::getPicFound() && stoolActivated) 
+                       || mGameState.player->isColliding(mGameState.livingstairs)
+                       || mGameState.dialogueActive;
 
     if (canInteract){
         const char* hint = "[E] to Interact";

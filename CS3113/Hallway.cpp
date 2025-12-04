@@ -55,8 +55,8 @@ void Hallway::initialise()
     );
 
     mGameState.player->setColliderDimensions({ 
-        mGameState.player->getScale().x * 0.9f , // TODO: make little smaller?
-        mGameState.player->getScale().y * 0.5f  // TODO: make little smaller?
+        mGameState.player->getScale().x * 0.9f ,
+        mGameState.player->getScale().y * 0.5f
     });
     mGameState.player->setColliderOffset({
         0.0f,
@@ -167,7 +167,7 @@ void Hallway::update(float deltaTime)
         }
         if (nearHerDoor){
             PlaySound(mGameState.doorSound);
-            mGameState.nextSceneID = 5; // TODO: CHANGE TO HER ROOM
+            mGameState.nextSceneID = 5;
             return;
         }
         if (nearLivingroomDoor){
@@ -177,7 +177,7 @@ void Hallway::update(float deltaTime)
                 return;
             }
             PlaySound(mGameState.stairsSound);
-            mGameState.nextSceneID = 9; // TODO: CHANGE TO LIVINGROOM
+            mGameState.nextSceneID = 9;
             return;
         }
         if (nearBedroomDoor){
@@ -187,20 +187,17 @@ void Hallway::update(float deltaTime)
                 return;
             }
             PlaySound(mGameState.doorSound);
-            mGameState.nextSceneID = 12; // TODO: CHANGE TO BEDROOM
+            mGameState.nextSceneID = 12;
             return;
         }
     }
 
-    // TODO: Decide if interaction will stay guided or not
-    // TODO: Fix dialogue system so no double clicks
 }
 
 void Hallway::render()
 {
     ClearBackground(BLACK);
 
-    // TODO: ADD CAMERA THINGS? more to like zoom into that room instead of void
     mGameState.bg->render();
     // mGameState.bg->displayCollider();
     mGameState.atticstairs->render();
