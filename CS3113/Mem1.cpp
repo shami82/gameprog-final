@@ -24,9 +24,11 @@ void Mem1::initialise()
     // confirm puzzle 1 is complete
     Scene::setPuz1Status(true);
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.bgm = LoadMusicStream("assets/audio/memory.mp3");
+    SetMusicVolume(mGameState.bgm, 0.70f);
+    mGameState.ringing = LoadSound("assets/audio/ringing.mp3");
+    SetSoundVolume(mGameState.ringing, 1.0f);
+    PlayMusicStream(mGameState.bgm);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -63,6 +65,8 @@ void Mem1::initialise()
 
 void Mem1::update(float deltaTime)
 {
+    if (!flashing) UpdateMusicStream(mGameState.bgm);
+
     if (flashing){
         flashTimer += deltaTime;
 
@@ -132,6 +136,8 @@ void Mem1::update(float deltaTime)
                 flashTimer = 0.0f;
                 flash9Shown = false;
                 mGameState.dialogueStep = 8;
+                StopMusicStream(mGameState.bgm);
+                PlaySound(mGameState.ringing);
                 break;
 
             case 11: // after flashing now 11
@@ -203,4 +209,6 @@ void Mem1::shutdown()
     UnloadTexture(textureMem10);
     UnloadTexture(textureMem11);
     UnloadTexture(textureDialogueBox);
+    UnloadMusicStream(mGameState.bgm);
+    UnloadSound(mGameState.ringing);
 }

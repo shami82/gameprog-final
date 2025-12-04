@@ -16,9 +16,9 @@ void BadEnd::initialise()
     textureDialogueBox = LoadTexture("assets/dialoguebox.PNG");
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.bgm = LoadMusicStream("assets/audio/bad_ending_song.mp3");
+    SetMusicVolume(mGameState.bgm, 0.50f);
+    PlayMusicStream(mGameState.bgm);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -51,6 +51,8 @@ void BadEnd::initialise()
 
 void BadEnd::update(float deltaTime)
 {
+    UpdateMusicStream(mGameState.bgm);
+
     if (IsKeyPressed(KEY_E)){
         mGameState.dialogueStep++;
 
@@ -81,6 +83,7 @@ void BadEnd::update(float deltaTime)
             break;
 
             case 6:
+            StopMusicStream(mGameState.bgm);
             mGameState.nextSceneID = 0; // go back to the start screen
             break;
         }
@@ -137,4 +140,6 @@ void BadEnd::shutdown()
     UnloadTexture(textureBad5);
     UnloadTexture(textureBad6);
     UnloadTexture(textureDialogueBox);
+
+    UnloadMusicStream(mGameState.bgm);
 }

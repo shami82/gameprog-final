@@ -61,7 +61,9 @@ struct GameState
     Music bgm;
     Sound stairsSound;
     Sound doorSound;
-    Sound heatbeatSound;
+    Music heartbeatLoop;
+    Sound sigh;
+    Sound ringing;
 
     Camera2D camera;
 
@@ -82,6 +84,7 @@ protected: // similar to private but children and friend classes can use them
     static bool polaroid2Found;
     static bool polaroid3Found;
     static bool polaroid4Found;
+    static bool seePolaroids;
     // for the second puzzle
     static bool picFound;
     static bool picPlaced;
@@ -113,6 +116,8 @@ public:
     static void setPol3Status(bool status)      { polaroid3Found = status; }
     static bool getPol4Status()                 { return polaroid4Found; }
     static void setPol4Status(bool status)      { polaroid4Found = status; }
+    static bool getSeePolaroids()               { return seePolaroids; }
+    static void setSeePolaroids(bool status)    { seePolaroids = status; }
     
     // for puzzle 2
     static bool getPicFound()                   { return picFound; }

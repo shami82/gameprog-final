@@ -29,7 +29,7 @@ private:
     bool showExitPrompt = false;
 
     float pulseTimer = 0.0f;
-    float pulseSpeed = 10.0f;
+    float pulseSpeed = 8.0f;
     float pulseAmount = 0.06f;
 
     int triesLeft = 3; // for finding key

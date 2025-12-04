@@ -166,7 +166,7 @@ void LivingRoom::initialise()
     
     // ------------ LIVING STAIRS -------------
     mGameState.livingstairs = new Entity(
-        {835.0f, 182.5f},
+        {840.0f, 182.5f},
         {static_cast<float>(textureLivingStairs.width),
          static_cast<float>(textureLivingStairs.height)},
         textureLivingStairs,

@@ -9,9 +9,9 @@ void Start::initialise()
     textureBG = LoadTexture("assets/title.PNG");
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.bgm = LoadMusicStream("assets/audio/farwell.mp3");
+    SetMusicVolume(mGameState.bgm, 0.40f);
+    PlayMusicStream(mGameState.bgm);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -40,7 +40,7 @@ void Start::initialise()
 
 void Start::update(float deltaTime)
 {
-    // UpdateMusicStream(mGameState.bgm);
+    UpdateMusicStream(mGameState.bgm);
     if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 1; } // go to instructions
 }
 
@@ -56,5 +56,5 @@ void Start::shutdown()
 {
     delete mGameState.bg;
 
-    // UnloadMusicStream(mGameState.bgm);
+    UnloadMusicStream(mGameState.bgm);
 }

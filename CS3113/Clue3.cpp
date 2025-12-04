@@ -23,9 +23,8 @@ void Clue3::initialise()
     textureDialogueBox = LoadTexture("assets/dialoguebox.PNG");
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.heartbeatLoop = LoadMusicStream("assets/audio/heartbeat.wav");
+    SetMusicVolume(mGameState.heartbeatLoop, 0.7f);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -79,6 +78,7 @@ void Clue3::initialise()
 void Clue3::update(float deltaTime)
 {
     if (stage == STAGE_MINIGAME){
+        UpdateMusicStream(mGameState.heartbeatLoop);
         pulseTimer += deltaTime * pulseSpeed;
     }
 
@@ -154,6 +154,7 @@ void Clue3::update(float deltaTime)
             minigameTimer = 0.0f;
             fillAmount = 0.0f;
             tappedOnce = false;
+            PlayMusicStream(mGameState.heartbeatLoop);
             return;
         }
     }
@@ -173,6 +174,7 @@ void Clue3::update(float deltaTime)
         minigameTimer += deltaTime; // update timer
 
         if (fillAmount >= fillTarget - 0.5f){ // success continue
+            StopMusicStream(mGameState.heartbeatLoop);
             minigameActive = false;
             stage = STAGE_POST_MINIGAME;
             Scene::setKeyFoundStatus(true);
@@ -185,6 +187,7 @@ void Clue3::update(float deltaTime)
 
         if ((minigameTimer >= minigameDuration) 
             || (tappedOnce && fillAmount == 0.0f)){ // fail go to bad end
+            StopMusicStream(mGameState.heartbeatLoop);
             minigameActive = false;
             mGameState.nextSceneID = 7;
             return;
@@ -338,4 +341,5 @@ void Clue3::shutdown()
     UnloadTexture(textureClue7);
     UnloadTexture(textureClue8);
     UnloadTexture(textureDialogueBox);
+    UnloadMusicStream(mGameState.heartbeatLoop);
 }

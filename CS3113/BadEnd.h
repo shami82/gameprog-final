@@ -24,6 +24,7 @@ public:
     void update(float deltaTime) override;
     void render() override;
     void shutdown() override;
+    bool usesFadeEffect() const override { return true; }
 };
 
 #endif

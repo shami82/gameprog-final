@@ -40,6 +40,9 @@ Effects *gEffects = nullptr;
 ShaderProgram gShader;
 Vector2 gLightPosition = { 0.0f, 0.0f };
 
+// so theres continuous music
+Music gRoomBGM;
+bool gRoomBGMPlaying = false;
 
 // Function Declarations
 void switchToScene(Scene *scene);
@@ -54,6 +57,19 @@ void switchToScene(Scene *scene)
     gCurrentScene = scene;
     gCurrentScene->initialise();
 
+    if((gCurrentScene == gLevels[3]) || (gCurrentScene == gLevels[4]) || 
+       (gCurrentScene == gLevels[5]) || (gCurrentScene == gLevels[9]) ||
+       (gCurrentScene == gLevels[12])){
+        if (!gRoomBGMPlaying) PlayMusicStream(gRoomBGM);
+        gRoomBGMPlaying = true;
+    }
+    else{
+        if (gRoomBGMPlaying){
+            StopMusicStream(gRoomBGM);
+        }
+        gRoomBGMPlaying = false;
+    }
+
     gEffects->start(FADEIN);
     gEffects->setEffectSpeed(1.5f);
 }
@@ -62,6 +78,8 @@ void initialise()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Still Here");
     InitAudioDevice();
+    gRoomBGM = LoadMusicStream("assets/audio/rooms.mp3");
+    SetMusicVolume(gRoomBGM, 0.5f);
 
     gShader.load("shaders/vertex.glsl", "shaders/fragment.glsl");
 
@@ -136,6 +154,8 @@ void processInput()
 
 void update() 
 {
+    UpdateMusicStream(gRoomBGM);
+
     float ticks = (float) GetTime();
     float deltaTime = ticks - gPreviousTicks;
     gPreviousTicks  = ticks;
@@ -213,6 +233,8 @@ void shutdown()
     delete gEffects;
 
     for (int i = 0; i < NUMBER_OF_LEVELS; i++) gLevels[i] = nullptr;
+
+    UnloadMusicStream(gRoomBGM);
 
     CloseAudioDevice();
     CloseWindow();

@@ -17,9 +17,11 @@ void Clue1::initialise()
     textureDialogueBox = LoadTexture("assets/dialoguebox.PNG");
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.sigh = LoadSound("assets/audio/sigh.wav");
+    mGameState.heartbeatLoop = LoadMusicStream("assets/audio/heartbeat.wav");
+    SetSoundVolume(mGameState.sigh, 0.7f);
+    SetMusicVolume(mGameState.heartbeatLoop, 0.7f);
+    PlaySound(mGameState.sigh); // start with the sigh
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -60,6 +62,10 @@ void Clue1::initialise()
 
 void Clue1::update(float deltaTime)
 {
+    if (stage == STAGE_MINIGAME){
+        UpdateMusicStream(mGameState.heartbeatLoop);
+    }
+
     pulseTimer += deltaTime * pulseSpeed;
     if (stage == STAGE_SHOW_BLUR && mGameState.dialogueActive){ // start dialogue
         if (IsKeyPressed(KEY_E)){ // close dialogue and start minigame
@@ -68,7 +74,7 @@ void Clue1::update(float deltaTime)
             minigameActive = true;
             minigameTimer = 0.0f;
             fillAmount = 0.0f;
-            // tapCount = 0;
+            PlayMusicStream(mGameState.heartbeatLoop);
             return;
         }
     }
@@ -77,7 +83,7 @@ void Clue1::update(float deltaTime)
         if (IsKeyPressed(KEY_P)){ // counting the P key taps
             fillAmount += fillPerTap;
             tappedOnce = true;
-            // tapCount++;
+
             if (fillAmount > fillTarget) fillAmount = fillTarget;
         }
 
@@ -89,6 +95,8 @@ void Clue1::update(float deltaTime)
         // bool success = (fillAmount >= fillTarget) || (tapCount >= maxTapsForAutoWin);
 
         if (fillAmount >= fillTarget - 0.5f){ // show the clear image
+            StopMusicStream(mGameState.heartbeatLoop);
+            StopSound(mGameState.sigh);
             minigameActive = false;
             mGameState.cutscene->setTexture(textureClue1Clear);
             stage = STAGE_SHOW_CLEAR;
@@ -100,6 +108,8 @@ void Clue1::update(float deltaTime)
 
         if ((minigameTimer >= minigameDuration) 
             || (tappedOnce && fillAmount == 0.0f)){ // fail go to bad end
+            StopMusicStream(mGameState.heartbeatLoop);
+            StopSound(mGameState.sigh);
             minigameActive = false;
             mGameState.nextSceneID = 7;
             return;
@@ -244,4 +254,7 @@ void Clue1::shutdown()
     UnloadTexture(textureClue1Blur);
     UnloadTexture(textureClue1Clear);
     UnloadTexture(textureDialogueBox);
+
+    UnloadSound(mGameState.sigh);
+    UnloadMusicStream(mGameState.heartbeatLoop);
 }

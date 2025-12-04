@@ -25,9 +25,11 @@ void Mem2::initialise()
     // confirm puzzle 2 is complete
     Scene::setPuz2Status(true);
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.bgm = LoadMusicStream("assets/audio/memory.mp3");
+    SetMusicVolume(mGameState.bgm, 0.70f);
+    mGameState.ringing = LoadSound("assets/audio/ringing.mp3");
+    SetSoundVolume(mGameState.ringing, 1.0f);
+    PlayMusicStream(mGameState.bgm);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -64,23 +66,33 @@ void Mem2::initialise()
 
 void Mem2::update(float deltaTime)
 {
+    if (!flashing) UpdateMusicStream(mGameState.bgm);
+
     if (flashing){
         flashTimer += deltaTime;
 
-        if (mGameState.dialogueStep == 10 && !flash10Shown){ // case 9 where we flash 10
-            if (flashTimer >= flashDuration){
+        if (mGameState.dialogueStep == 9 && !flash10Shown){ // case 9 where we flash 10
+            if (flashTimer >= 0.5f){ 
                 flash10Shown = true;
                 flashTimer = 0.0f;
-                
-                mGameState.dialogueStep = 11;
-                mGameState.cutscene->setTexture(textureMem11);
-                mGameState.dialogueText = "...";
+
+                mGameState.dialogueStep = 10;
+                mGameState.cutscene->setTexture(textureMem10);
+                mGameState.dialogueText = "";
             }
             return;
         }
 
-        if (mGameState.dialogueStep == 11){
-            flashing = false;
+        if (mGameState.dialogueStep == 10){
+            if (flashTimer >= 1.0f){
+                flashTimer = 0.0f;
+                mGameState.dialogueStep = 11;
+                mGameState.cutscene->setTexture(textureMem11);
+                mGameState.dialogueText = "";
+
+                flashing = false; // allow E again
+            }
+            return;
         }
         return;
     }
@@ -135,10 +147,8 @@ void Mem2::update(float deltaTime)
                 flash10Shown = false;
                 flashTimer = 0.0f;
                 mGameState.dialogueStep = 10;
-                break;
-
-            case 11: 
-                // already shows mem2_11 from flashing
+                StopMusicStream(mGameState.bgm);
+                PlaySound(mGameState.ringing);
                 break;
 
             case 12:

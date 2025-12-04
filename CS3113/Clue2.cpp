@@ -17,9 +17,11 @@ void Clue2::initialise()
     textureDialogueBox = LoadTexture("assets/dialoguebox.PNG");
     mGameState.nextSceneID = -1;
 
-    // mGameState.bgm = LoadMusicStream("assets/void.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.50f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.sigh = LoadSound("assets/audio/sigh.wav");
+    mGameState.heartbeatLoop = LoadMusicStream("assets/audio/heartbeat.wav");
+    SetSoundVolume(mGameState.sigh, 0.7f);
+    SetMusicVolume(mGameState.heartbeatLoop, 0.7f);
+    PlaySound(mGameState.sigh); // start with the sigh
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -59,6 +61,10 @@ void Clue2::initialise()
 
 void Clue2::update(float deltaTime)
 {
+    if (stage == STAGE_MINIGAME){
+        UpdateMusicStream(mGameState.heartbeatLoop);
+    }
+
     pulseTimer += deltaTime * pulseSpeed;
 
     if (stage == STAGE_SHOW_BLUR && mGameState.dialogueActive){ // start dialogue
@@ -68,7 +74,7 @@ void Clue2::update(float deltaTime)
             minigameActive = true;
             minigameTimer = 0.0f;
             fillAmount = 0.0f;
-            // tapCount = 0;
+            PlayMusicStream(mGameState.heartbeatLoop);
             return;
         }
     }
@@ -88,6 +94,8 @@ void Clue2::update(float deltaTime)
         // bool success = (fillAmount >= fillTarget) || (tapCount >= maxTapsForAutoWin);
 
         if (fillAmount >= fillTarget - 0.5f){ // show the clear image
+            StopMusicStream(mGameState.heartbeatLoop);
+            StopSound(mGameState.sigh);
             minigameActive = false;
             mGameState.cutscene->setTexture(textureClue2Clear);
             stage = STAGE_SHOW_CLEAR;
@@ -99,6 +107,8 @@ void Clue2::update(float deltaTime)
 
         if ((minigameTimer >= minigameDuration) 
             || (tappedOnce && fillAmount == 0.0f)){ // fail go to bad end
+            StopMusicStream(mGameState.heartbeatLoop);
+            StopSound(mGameState.sigh);
             minigameActive = false;
             mGameState.nextSceneID = 7;
             return;
@@ -243,4 +253,7 @@ void Clue2::shutdown()
     UnloadTexture(textureClue2Blur);
     UnloadTexture(textureClue2Clear);
     UnloadTexture(textureDialogueBox);
+
+    UnloadSound(mGameState.sigh);
+    UnloadMusicStream(mGameState.heartbeatLoop);
 }

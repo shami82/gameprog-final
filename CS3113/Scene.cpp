@@ -9,6 +9,7 @@ bool Scene::polaroid1Found = false;
 bool Scene::polaroid2Found = false;
 bool Scene::polaroid3Found = false;
 bool Scene::polaroid4Found = false;
+bool Scene::seePolaroids = false;
 
 // for the second puzzle
 bool Scene::picFound = false;
