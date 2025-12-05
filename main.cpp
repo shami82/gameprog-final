@@ -127,7 +127,7 @@ void initialise()
     gLevels.push_back(gClue3);
     gLevels.push_back(gEnd);
 
-    switchToScene(gLevels[0]); // change to see specific scenes
+    switchToScene(gLevels[14]); // change to see specific scenes
 
     SetTargetFPS(FPS);
 }

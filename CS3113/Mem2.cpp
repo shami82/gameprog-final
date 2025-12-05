@@ -153,7 +153,7 @@ void Mem2::update(float deltaTime)
 
             case 12:
                 mGameState.cutscene->setTexture(textureMem12);
-                mGameState.dialogueText = "Oh honey, I miss you";
+                mGameState.dialogueText = "...I miss you";
                 break;
 
             case 13:
@@ -221,4 +221,7 @@ void Mem2::shutdown()
     UnloadTexture(textureMem11);
     UnloadTexture(textureMem12);
     UnloadTexture(textureDialogueBox);
+
+    UnloadMusicStream(mGameState.bgm);
+    UnloadSound(mGameState.ringing);
 }

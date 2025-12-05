@@ -209,6 +209,7 @@ void Mem1::shutdown()
     UnloadTexture(textureMem10);
     UnloadTexture(textureMem11);
     UnloadTexture(textureDialogueBox);
+    
     UnloadMusicStream(mGameState.bgm);
     UnloadSound(mGameState.ringing);
 }
