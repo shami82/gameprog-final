@@ -166,12 +166,12 @@ void End::update(float deltaTime)
 
             case 19:
                 mGameState.cutscene->setTexture(textureEnd20);
-                mGameState.dialogueText = "I survived and for so long… that felt like a\npunishment";
+                mGameState.dialogueText = "I survived and for so long... that felt like a\npunishment";
                 break;
 
             case 20:
                 mGameState.cutscene->setTexture(textureEnd21);
-                mGameState.dialogueText = "But they wouldn’t want me to fade away with\nthem";
+                mGameState.dialogueText = "But they wouldn't want me to fade away with\nthem";
                 break;
 
             case 21:
