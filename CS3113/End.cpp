@@ -89,10 +89,6 @@ void End::update(float deltaTime)
                 mGameState.dialogueText = "I haven't looked at this day...";
                 break;
 
-            // case 4:
-            //     mGameState.nextSceneID = 0; // go back to the start screen
-            //     break;
-
             case 4:
                 mGameState.cutscene->setTexture(textureEnd5);
                 mGameState.dialogueText = "...in so long";
