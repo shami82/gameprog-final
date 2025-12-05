@@ -240,9 +240,13 @@ void shutdown()
     delete gBedroom;
     delete gClue3;
     delete gEnd;
-    delete gEffects;
 
     for (int i = 0; i < NUMBER_OF_LEVELS; i++) gLevels[i] = nullptr;
+
+    delete gEffects;
+    gEffects = nullptr;
+
+    gShader.unload();
 
     UnloadMusicStream(gRoomBGM);
 
@@ -256,7 +260,9 @@ int main(void)
 
     while (gAppStatus == RUNNING)
     {
+        std::cout << "AFTER MAIN INITIALIZE" << std::endl;
         processInput();
+        std::cout << "AFTER MAIN PROCESS INPUT" << std::endl;
         update();
 
         // now has fade out
