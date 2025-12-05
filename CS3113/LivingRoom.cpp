@@ -431,9 +431,9 @@ void LivingRoom::render()
                        mGameState.player->isColliding(mGameState.livingbookshelf) ||
                        mGameState.player->isColliding(mGameState.livingshelf) ||
                        mGameState.player->isColliding(mGameState.livingtable) ||
-                       mGameState.player->isColliding(mGameState.livingstool) ||
                        mGameState.player->isColliding(mGameState.livingtv))
-                       && !Scene::getPicFound() && stoolActivated) 
+                       && !Scene::getPicFound() && stoolActivated)
+                       || mGameState.player->isColliding(mGameState.livingstool)
                        || mGameState.player->isColliding(mGameState.livingstairs)
                        || mGameState.dialogueActive;
 
