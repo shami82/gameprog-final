@@ -70,118 +70,97 @@ void End::update(float deltaTime)
     UpdateMusicStream(mGameState.bgm);
 
     if (IsKeyPressed(KEY_E)){
+        mGameState.dialogueActive = true;
         mGameState.dialogueStep++;
 
-        switch (mGameState.dialogueStep){ // each frame in cases to modify
-            case 1:
-                mGameState.cutscene->setTexture(textureEnd2);
-                mGameState.dialogueText = "";
-                break;
+        int s = mGameState.dialogueStep;
 
-            case 2:
-                mGameState.cutscene->setTexture(textureEnd3);
-                mGameState.dialogueText = "";
-                break;
-            
-            case 3:
-                mGameState.cutscene->setTexture(textureEnd4);
-                mGameState.dialogueText = "I haven't looked at this day...";
-                break;
-
-            case 4:
-                mGameState.cutscene->setTexture(textureEnd5);
-                mGameState.dialogueText = "...in so long";
-                break;
-
-            case 5:
-                mGameState.cutscene->setTexture(textureEnd6);
-                mGameState.dialogueText = "She was so excited...";
-                break;
-
-            case 6:
-                mGameState.cutscene->setTexture(textureEnd7);
-                mGameState.dialogueText = "...she barely slept the night before";
-                break;
-
-            case 7:
-                mGameState.cutscene->setTexture(textureEnd8);
-                mGameState.dialogueText = "We couldn't stop smiling";
-                break;
-
-            case 8:
-                mGameState.cutscene->setTexture(textureEnd9);
-                mGameState.dialogueText = "It felt like her whole future was stretching out in front\nof her";
-                break;
-
-            case 9:
-                mGameState.cutscene->setTexture(textureEnd10);
-                mGameState.dialogueText = "";
-                break;
-
-            case 10:
-                mGameState.cutscene->setTexture(textureEnd11);
-                mGameState.dialogueText = "She told me";
-                break;
-
-            case 11:
-                mGameState.cutscene->setTexture(textureEnd12);
-                mGameState.dialogueText = "...she couldn't wait to show us the campus";
-                break;
-
-            case 12:
-                mGameState.cutscene->setTexture(textureEnd13);
-                mGameState.dialogueText = "I remember thinking";
-                break;
-
-            case 13:
-                mGameState.cutscene->setTexture(textureEnd14);
-                mGameState.dialogueText = "We have so much time";
-                break;
-
-            case 14:
-                mGameState.cutscene->setTexture(textureEnd15);
-                mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept\nthat I'm here...";
-                break;
-
-            case 15:
-                mGameState.cutscene->setTexture(textureEnd16);
-                mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept\nthat I'm here...";
-                break;
-
-            case 16:
-                mGameState.cutscene->setTexture(textureEnd17);
-                mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept\nthat I'm here...";
-                break;
-            
-            case 17:
-                mGameState.cutscene->setTexture(textureEnd18);
-                mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept\nthat I'm here...";
-                break;
-
-            case 18:
-                mGameState.cutscene->setTexture(textureEnd19);
-                mGameState.dialogueText = "...and they're not";
-                break;
-
-            case 19:
-                mGameState.cutscene->setTexture(textureEnd20);
-                mGameState.dialogueText = "I survived and for so long... and that felt like a\npunishment";
-                break;
-
-            case 20:
-                mGameState.cutscene->setTexture(textureEnd21);
-                mGameState.dialogueText = "But they wouldn't want me to fade away with them";
-                break;
-
-            case 21:
-                mGameState.cutscene->setTexture(textureEnd22);
-                mGameState.dialogueText = "'cause I'm...";
-                break;
-
-            case 22:
-                mGameState.nextSceneID = 0; // go back to the start screen
-                break;
-
+        if (s == 1){
+            mGameState.cutscene->setTexture(textureEnd2);
+            mGameState.dialogueText = "";
+        }
+        else if (s == 2){
+            mGameState.cutscene->setTexture(textureEnd3);
+            mGameState.dialogueText = "";
+        }
+        else if (s == 3){
+            mGameState.cutscene->setTexture(textureEnd4);
+            mGameState.dialogueText = "I haven't looked at this day...";
+        }
+        else if (s == 4){
+            mGameState.cutscene->setTexture(textureEnd5);
+            mGameState.dialogueText = "...in so long";
+        }
+        else if (s == 5){
+            mGameState.cutscene->setTexture(textureEnd6);
+            mGameState.dialogueText = "She was so excited...";
+        }
+        else if (s == 6){
+            mGameState.cutscene->setTexture(textureEnd7);
+            mGameState.dialogueText = "...she barely slept the night before";
+        }
+        else if (s == 7){
+            mGameState.cutscene->setTexture(textureEnd8);
+            mGameState.dialogueText = "We couldn't stop smiling";
+        }
+        else if (s == 8){
+            mGameState.cutscene->setTexture(textureEnd9);
+            mGameState.dialogueText = "It felt like her whole future was stretching out in front\nof her";
+        }
+        else if (s == 9){
+            mGameState.cutscene->setTexture(textureEnd10);
+            mGameState.dialogueText = "";
+        }
+        else if (s == 10){
+            mGameState.cutscene->setTexture(textureEnd11);
+            mGameState.dialogueText = "She told me";
+        }
+        else if (s == 11){
+            mGameState.cutscene->setTexture(textureEnd12);
+            mGameState.dialogueText = "...she couldn't wait to show us the campus";
+        }
+        else if (s == 12){
+            mGameState.cutscene->setTexture(textureEnd13);
+            mGameState.dialogueText = "I remember thinking";
+        }
+        else if (s == 13){
+            mGameState.cutscene->setTexture(textureEnd14);
+            mGameState.dialogueText = "We have so much time";
+        }
+        else if (s == 14){
+            mGameState.cutscene->setTexture(textureEnd15);
+            mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept\nthat I'm here...";
+        }
+        else if (s == 15){
+            mGameState.cutscene->setTexture(textureEnd16);
+            mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept\nthat I'm here...";
+        }
+        else if (s == 16){
+            mGameState.cutscene->setTexture(textureEnd17);
+            mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept\nthat I'm here...";
+        }
+        else if (s == 17){
+            mGameState.cutscene->setTexture(textureEnd18);
+            mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept\nthat I'm here...";
+        }
+        else if (s == 18){
+            mGameState.cutscene->setTexture(textureEnd19);
+            mGameState.dialogueText = "...and they're not";
+        }
+        else if (s == 19){
+            mGameState.cutscene->setTexture(textureEnd20);
+            mGameState.dialogueText = "I survived and for so long... and that felt like a\npunishment";
+        }
+        else if (s == 20){
+            mGameState.cutscene->setTexture(textureEnd21);
+            mGameState.dialogueText = "But they wouldn't want me to fade away with them";
+        }
+        else if (s == 21){
+            mGameState.cutscene->setTexture(textureEnd22);
+            mGameState.dialogueText = "'cause I'm...";
+        }
+        else if (s == 22){
+            mGameState.nextSceneID = 0; // go back to the start screen
         }
     }
 }

@@ -14,7 +14,7 @@
 constexpr int SCREEN_WIDTH     = 990,
               SCREEN_HEIGHT    = 720,
               FPS              = 120,
-              NUMBER_OF_LEVELS = 16; // 5 rooms,1 start,1 instr,1 intro,2 end,3 memories,3 clues, 1 effect, 1 shader
+              NUMBER_OF_LEVELS = 15; // 5 rooms,1 start,1 instr,1 intro,2 end,2 memories,3 clues, 1 effect, 1 shader
 
 constexpr Vector2 ORIGIN       = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
@@ -262,7 +262,7 @@ int main(void)
     {
         std::cout << "AFTER MAIN INITIALIZE" << std::endl;
         processInput();
-        std::cout << "AFTER MAIN PROCESS INPUT" << std::endl;
+        std::cout << "AFTER MAIN PROCESS INPUT\n" << std::endl;
         update();
 
         // now has fade out
