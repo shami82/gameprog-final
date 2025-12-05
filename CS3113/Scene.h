@@ -5,69 +5,69 @@
 
 struct GameState
 {
-    Entity *player;
-    Entity *bg; // needs unique collider offsets to the size of the walkable area (also used for title)
+    Entity *player = nullptr;
+    Entity *bg = nullptr; // needs unique collider offsets to the size of the walkable area (also used for title)
     
-    Entity *dialoguebox;
+    Entity *dialoguebox = nullptr;
     bool dialogueActive = false;
     std::string dialogueText;
     int dialogueStep = 0; // for when there's multiple things of dialogue
 
     // for attic
-    Entity *atticdoor; // leads to the hallway
-    Entity *chest; // puzzle 1 interactable
-    Entity *wardrobe; // puzzle 2 interactable
-    Entity *album; // puzzle 3 interactable
+    Entity *atticdoor = nullptr; // leads to the hallway
+    Entity *chest = nullptr; // puzzle 1 interactable
+    Entity *wardrobe = nullptr; // puzzle 2 interactable
+    Entity *album = nullptr; // puzzle 3 interactable
 
     // for hallway
-    Entity *atticstairs; // leads back to attic
-    Entity *herdoor; // leads to herroom (puzzle 1)
-    Entity *bedroomdoor; // leads to bedroom (puzzle 3)
-    Entity *livingroomdoor; // leads to livingroom (puzzle 2)
+    Entity *atticstairs = nullptr; // leads back to attic
+    Entity *herdoor = nullptr; // leads to herroom (puzzle 1)
+    Entity *bedroomdoor = nullptr; // leads to bedroom (puzzle 3)
+    Entity *livingroomdoor = nullptr; // leads to livingroom (puzzle 2)
 
     // for her room
-    Entity *herbed;
-    Entity *herhallwaydoor;
-    Entity *beanbag;
-    Entity *herdesk;
-    Entity *herchair;
-    Entity *hershelf;
-    Entity *bookshelf;
-    Entity *hertable;
-    Entity *polaroids;
+    Entity *herbed = nullptr;
+    Entity *herhallwaydoor = nullptr;
+    Entity *beanbag = nullptr;
+    Entity *herdesk = nullptr;
+    Entity *herchair = nullptr;
+    Entity *hershelf = nullptr;
+    Entity *bookshelf = nullptr;
+    Entity *hertable = nullptr;
+    Entity *polaroids = nullptr;
 
     // for clues and memory scenes
-    Entity *cutscene;
+    Entity *cutscene = nullptr;
 
     // for living room
-    Entity *couch1;
-    Entity *couch2;
-    Entity *livingbookshelf;
-    Entity *livingshelf;
-    Entity *livingstairs;
-    Entity *livingstool;
-    Entity *livingtable;
-    Entity *livingtv;
+    Entity *couch1 = nullptr;
+    Entity *couch2 = nullptr;
+    Entity *livingbookshelf = nullptr;
+    Entity *livingshelf = nullptr;
+    Entity *livingstairs = nullptr;
+    Entity *livingstool = nullptr;
+    Entity *livingtable = nullptr;
+    Entity *livingtv = nullptr;
 
     // for bedroom
-    Entity *bedroombed;
-    Entity *bedroomdresser;
-    Entity *bedroomshelves;
-    Entity *bedroomtable;
-    Entity *bedroomwardrobe;
-    Entity *bedroommirror;
-    Entity *hallwaydoor;
+    Entity *bedroombed = nullptr;
+    Entity *bedroomdresser = nullptr;
+    Entity *bedroomshelves = nullptr;
+    Entity *bedroomtable = nullptr;
+    Entity *bedroomwardrobe = nullptr;
+    Entity *bedroommirror = nullptr;
+    Entity *hallwaydoor = nullptr;
 
-    Music bgm;
-    Sound stairsSound;
-    Sound doorSound;
-    Music heartbeatLoop;
-    Sound sigh;
-    Sound ringing;
+    Music bgm = {0};
+    Sound stairsSound = {0};
+    Sound doorSound = {0};
+    Music heartbeatLoop = {0};
+    Sound sigh = {0};
+    Sound ringing = {0};
 
-    Camera2D camera;
+    Camera2D camera = {0};
 
-    int nextSceneID;
+    int nextSceneID = -1;
 };
 
 class Scene 
