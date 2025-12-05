@@ -111,7 +111,7 @@ void End::update(float deltaTime)
 
             case 8:
                 mGameState.cutscene->setTexture(textureEnd9);
-                mGameState.dialogueText = "It felt like her whole future was stretching out in front of her";
+                mGameState.dialogueText = "It felt like her whole future was stretching\nout in front of her";
                 break;
 
             case 9:
@@ -141,22 +141,22 @@ void End::update(float deltaTime)
 
             case 14:
                 mGameState.cutscene->setTexture(textureEnd15);
-                mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept that I'm here...";
+                mGameState.dialogueText = "I didn't want to face this page, because I'd\nhave to accept that I'm here...";
                 break;
 
             case 15:
                 mGameState.cutscene->setTexture(textureEnd16);
-                mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept that I'm here...";
+                mGameState.dialogueText = "I didn't want to face this page, because I'd\nhave to accept that I'm here...";
                 break;
 
             case 16:
                 mGameState.cutscene->setTexture(textureEnd17);
-                mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept that I'm here...";
+                mGameState.dialogueText = "I didn't want to face this page, because I'd\nhave to accept that I'm here...";
                 break;
             
             case 17:
                 mGameState.cutscene->setTexture(textureEnd18);
-                mGameState.dialogueText = "I didn't want to face this page, because I'd have to accept that I'm here...";
+                mGameState.dialogueText = "I didn't want to face this page, because I'd\nhave to accept that I'm here...";
                 break;
 
             case 18:
@@ -166,12 +166,12 @@ void End::update(float deltaTime)
 
             case 19:
                 mGameState.cutscene->setTexture(textureEnd20);
-                mGameState.dialogueText = "I survived and for so long… that felt like a punishment";
+                mGameState.dialogueText = "I survived and for so long… that felt like a\npunishment";
                 break;
 
             case 20:
                 mGameState.cutscene->setTexture(textureEnd21);
-                mGameState.dialogueText = "But they wouldn’t want me to fade away with them";
+                mGameState.dialogueText = "But they wouldn’t want me to fade away with\nthem";
                 break;
 
             case 21:
